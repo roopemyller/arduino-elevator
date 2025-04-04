@@ -9,112 +9,71 @@
 ###################################
  */ 
 
-/*
-#########################################################
-
-ALL HERE BELOW FROM WEEK10 EXC - I2C / TWI COMMUNICATIONS
-
-#########################################################
-*/
-
 #define F_CPU 16000000UL
-#define FOSC 16000000UL
-#define BAUD 9600
-
-#define MYUBRR (FOSC/16/BAUD)-1
-
-#define SLAVE_ADDRESS 0b1010111
-
+#define MOVEMENT_LED PB0 // LED for elevator movement (pin 8 on UNO)
+#define DOOR_LED PB1 // LED for door opening (pin 9 on UNO)
 #include <avr/io.h>
 #include <util/delay.h>
-#include <util/setbaud.h>
 #include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
+#include <avr/interrupt.h>
 
-//USART initiation p.206
-static void USART_init(uint16_t ubrr) {
-	UBRR0H = (unsigned char) (ubrr >> 8);   //datasheet p.206
-	UBRR0L = (unsigned char) ubrr;          //datasheet p.206
-	UCSR0B |= (1 << RXEN0) | (1 << TXEN0);  //datasheet p.206
-	UCSR0C |= (1 << USBS0) | (3 << UCSZ00); //datasheet p.221 and p.222
-}
+// Global variable to handle door timing outside the ISR
+volatile uint32_t door_timer = 0;
+volatile uint8_t door_active = 0;
 
-//datasheet p.207
-static void USART_Transmit(unsigned char data, FILE *stream){
-	/* Wait until the transmit buffer is empty*/
-	while(!(UCSR0A & (1 << UDRE0))) //datasheet p.207, p. 219
-	{
-		;
-	}
-
-	/* Puts the data into a buffer, then sends/transmits the data */
-	UDR0 = data;
-}
-
-static char USART_Receive(FILE *stream) //datasheet p.210, 219
-{
-	/* Wait until the transmit buffer is empty*/
-	while(!(UCSR0A & (1 << RXC0)))
-	{
-		;
-	}
-
-	/* Get the received data from the buffer */
-	return UDR0;
-}
-
-// Stream functions for UART
-FILE uart_output = FDEV_SETUP_STREAM(USART_Transmit, NULL, _FDEV_SETUP_WRITE);
-FILE uart_input = FDEV_SETUP_STREAM(NULL, USART_Receive, _FDEV_SETUP_READ);
-
-int main(void)
-{
-
-	USART_init(MYUBRR);
-	
-	stdout = &uart_output;
-	stdin = &uart_input;
-	
+void I2C_init(uint8_t address){
 	// Init the TWI Slave
-	TWCR |= (1 << TWEA) | (1 << TWEN);
-	TWCR &= ~(1 << TWSTA) & ~(1 << TWSTO);
+	TWAR = (address << 1); // Set slave address
+	TWCR = (1 << TWEA) | (1 << TWEN) | (1 << TWIE); // Enable TWI, ACK and interrupt
+	sei();
+}
+
+ISR(TWI_vect){
+	uint8_t status = TWSR & 0xF8;  // Get status code
 	
-	TWAR = 0b10101110; // 7-bit slave address and 1 write bit (LSB)
-
-	char twi_receive_data[20];
-	char test_char_array[16];
-	uint8_t twi_index = 0;
-	uint8_t twi_status = 0;
-
-	while (1){
+	if(status == 0x60 || status == 0x68) {
+		// SLA+W received, ACK returned
+		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
+	}
+	else if(status == 0x80) {
+		// Data received, ACK returned
+		char command = TWDR;
 		
-		while(!(TWCR & (1 << TWINT))){;} // Wait for TWINT Flag set
-		
-		twi_status = (TWSR & 0xF8); //Check value of TWI status register
-		
-		TWCR |= (1 << TWINT) | (1 << TWEA) | (1 << TWEN); // Clear TWINT bit in TWCR to start transmission of address
-		
-		while(!(TWCR & (1 << TWINT))){;} // Wait for TWINT Flag set
-		
-		twi_status = (TWSR & 0xF8); // Check value of TWI status register
-		
-		// Check slave receiver status codes
-		if ((twi_status == 0x80) || (twi_status == 0x90)) {
-			twi_receive_data[twi_index] = TWDR;
-			twi_index++;
-			}else if ((twi_status == 0x88) || (twi_status == 0x98)) {
-			twi_receive_data[twi_index] = TWDR;
-			twi_index++;
-			}else if (twi_status == 0xA0) {
-			TWCR |= (1 << TWINT);
+		if(command == 'M'){
+			PORTB |= (1 << MOVEMENT_LED); // Turn ON movement LED
+			} else if(command == 'S'){
+			PORTB &= ~(1 << MOVEMENT_LED); // Turn OFF movement LED
+			} else if (command == 'O') {
+			PORTB |= (1 << DOOR_LED);  // Turn on door LED
+			door_active = 1;
+			door_timer = 0;  // Reset timer
 		}
 		
-		if(20 <= twi_index){
-			printf(twi_receive_data);
-			twi_index = 0;
-		}
+		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
+	}
+	else {
+		// Default - send ACK and continue
+		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
 }
 
+int main(void){
+	DDRB |= (1 << MOVEMENT_LED) | (1 << DOOR_LED); // Set LED pins as outputs
+	I2C_init(8); // Init I2C with address 8
+	
+	while (1){
+		// Handle door timing in the main loop
+		if (door_active) {
+			_delay_ms(10);  // Small delay for counting
+			door_timer += 10;
+			
+			if (door_timer >= 5000) {  // 5 seconds elapsed
+				PORTB &= ~(1 << DOOR_LED);  // Turn off door LED
+				door_active = 0;
+			}
+		}
+	}
+	
+	return 0;
+}
 
