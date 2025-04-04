@@ -10,8 +10,11 @@
  */ 
 
 #define F_CPU 16000000UL
-#define MOVEMENT_LED PB0 // LED for elevator movement (pin 8 on UNO)
-#define DOOR_LED PB1 // LED for door opening (pin 9 on UNO)
+#define MOVEMENT_LED PB1 // LED for elevator movement (pin 9 on UNO)
+#define DOOR_LED PB2 // LED for door opening (pin 10 on UNO)
+
+#define SLAVE_ADDRESS 0b1010111
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdio.h>
@@ -21,29 +24,30 @@
 volatile uint32_t door_timer = 0;
 volatile uint8_t door_active = 0;
 
-void I2C_init(uint8_t address){
+void TWI_init(){
 	// Init the TWI Slave
-	TWAR = (address << 1); // Set slave address
-	TWCR = (1 << TWEA) | (1 << TWEN) | (1 << TWIE); // Enable TWI, ACK and interrupt
+	TWCR = (1 << TWEN) | (1 << TWEA) | (1 << TWIE); // Enable TWI, ACK and interrupt
+	TWAR = (SLAVE_ADDRESS << 1); // Set slave address
 	sei();
 }
 
 ISR(TWI_vect){
-	uint8_t status = TWSR & 0xF8;  // Get status code
+	// Get status code
+	uint8_t twi_status = (TWSR & 0xF8);
 	
-	if(status == 0x60 || status == 0x68) {
+	if(twi_status == 0x60 || twi_status == 0x68) {
 		// SLA+W received, ACK returned
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
-	else if(status == 0x80) {
+	else if((twi_status == 0x80) || (twi_status == 0x90)) {
 		// Data received, ACK returned
 		char command = TWDR;
 		
 		if(command == 'M'){
 			PORTB |= (1 << MOVEMENT_LED); // Turn ON movement LED
-			} else if(command == 'S'){
+		} else if(command == 'S'){
 			PORTB &= ~(1 << MOVEMENT_LED); // Turn OFF movement LED
-			} else if (command == 'O') {
+		} else if (command == 'O') {
 			PORTB |= (1 << DOOR_LED);  // Turn on door LED
 			door_active = 1;
 			door_timer = 0;  // Reset timer
@@ -58,8 +62,12 @@ ISR(TWI_vect){
 }
 
 int main(void){
-	DDRB |= (1 << MOVEMENT_LED) | (1 << DOOR_LED); // Set LED pins as outputs
-	I2C_init(8); // Init I2C with address 8
+	
+	// Set LED pins as outputs
+	DDRB |= (1 << MOVEMENT_LED) | (1 << DOOR_LED);
+	
+	// Init TWI, will use ISR
+	TWI_init();
 	
 	while (1){
 		// Handle door timing in the main loop
