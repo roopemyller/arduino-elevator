@@ -38,9 +38,9 @@ void UART_init(void);
 void UART_send_char(unsigned char data);
 void UART_send_string(char* str);
 void send_command(char cmd);
+void door_open_close();
 
 char key_str[4];
-
 char* ptr;
 
 
@@ -85,7 +85,7 @@ int main(void) {
 		UART_send_string("\r\n");
 		
 		switch(current_state){
-			case 1:
+			case 1: // GO UP
 			
 				_delay_ms(20);  // Debounce
     
@@ -100,26 +100,28 @@ int main(void) {
 					UART_send_string("\r\n");
 					_delay_ms(200);
 				}
-				
 				send_command('S');
-				UART_send_string("Door open!\r\n");
-	            send_command('O');
+				
+				// Door open-close sequence
+				door_open_close();
+				
 				_delay_ms(200);  // Prevent multiple triggers				
 				break;
 			
-			case 2:
+			case 2: // SAME FLOOR
 			
 				_delay_ms(20);  // Debounce
 			
 				UART_send_string("No action.\r\n");
 				send_command('S');
 				
-				UART_send_string("Door open!\r\n");
-	            send_command('O');
+				// Door open-close sequence
+				door_open_close();
+				
 				_delay_ms(200);  // Prevent multiple triggers			
 				break;
 				
-			case 3:
+			case 3: // GO DOWN
 			
 	            _delay_ms(20);  // Debounce
 	            UART_send_string("Going down!\r\n");
@@ -134,8 +136,10 @@ int main(void) {
 				}
 				
 				send_command('S');
-				UART_send_string("Door open!\r\n");
-				send_command('O');
+				
+				// Door open-close sequence
+				door_open_close();
+				
 	            _delay_ms(200);  // Prevent multiple triggers	
 				break;
 		}
@@ -144,6 +148,14 @@ int main(void) {
 		_delay_ms(10);
 	}
 	return 0;
+}
+
+void door_open_close(){
+	UART_send_string("Door open!\r\n");
+	send_command('O');
+	_delay_ms(5000);
+	UART_send_string("Door close!\r\n");
+	send_command('C');
 }
 
 void setup(){

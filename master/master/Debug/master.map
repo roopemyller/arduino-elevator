@@ -256,7 +256,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x78c
+.text           0x00000000      0x79c
  *(.vectors)
  .vectors       0x00000000       0xe4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
                 0x00000000                __vector_default
@@ -416,25 +416,28 @@ END GROUP
  .text.send_command
                 0x00000456       0x78 main.o
                 0x00000456                send_command
- .text.main     0x000004ce      0x244 main.o
-                0x000004ce                main
- .text.libgcc   0x00000712       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_tablejump2.o)
-                0x00000712                __tablejump2__
+ .text.door_open_close
+                0x000004ce       0x28 main.o
+                0x000004ce                door_open_close
+ .text.main     0x000004f6      0x22c main.o
+                0x000004f6                main
+ .text.libgcc   0x00000722       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_tablejump2.o)
+                0x00000722                __tablejump2__
  .text.avr-libc
-                0x00000722       0x14 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(itoa_ncheck.o)
-                0x00000722                __itoa_ncheck
+                0x00000732       0x14 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(itoa_ncheck.o)
+                0x00000732                __itoa_ncheck
  .text.avr-libc
-                0x00000736       0x32 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(utoa_ncheck.o)
-                0x00000736                __utoa_ncheck
-                0x00000738                __utoa_common
+                0x00000746       0x32 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(utoa_ncheck.o)
+                0x00000746                __utoa_ncheck
+                0x00000748                __utoa_common
  .text.avr-libc
-                0x00000768       0x20 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(strrev.o)
-                0x00000768                strrev
-                0x00000788                . = ALIGN (0x2)
+                0x00000778       0x20 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(strrev.o)
+                0x00000778                strrev
+                0x00000798                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000788        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
-                0x00000788                _exit
-                0x00000788                exit
+ .fini9         0x00000798        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+                0x00000798                _exit
+                0x00000798                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -453,11 +456,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000788        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+ .fini0         0x00000798        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000078c                _etext = .
+                0x0000079c                _etext = .
 
-.data           0x00800200      0x162 load address 0x0000078c
+.data           0x00800200      0x170 load address 0x0000079c
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -465,37 +468,37 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800200      0x161 main.o
-                                0x164 (size before relaxing)
+                0x00800200      0x16f main.o
+                                0x172 (size before relaxing)
  *(.gnu.linkonce.r*)
-                0x00800362                . = ALIGN (0x2)
- *fill*         0x00800361        0x1 
-                0x00800362                _edata = .
-                0x00800362                PROVIDE (__data_end, .)
+                0x00800370                . = ALIGN (0x2)
+ *fill*         0x0080036f        0x1 
+                0x00800370                _edata = .
+                0x00800370                PROVIDE (__data_end, .)
 
-.bss            0x00800362        0x3
-                0x00800362                PROVIDE (__bss_start, .)
+.bss            0x00800370        0x3
+                0x00800370                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.floors_to_travel
-                0x00800362        0x1 main.o
-                0x00800362                floors_to_travel
+                0x00800370        0x1 main.o
+                0x00800370                floors_to_travel
  .bss.current_state
-                0x00800363        0x1 main.o
-                0x00800363                current_state
+                0x00800371        0x1 main.o
+                0x00800371                current_state
  .bss.current_floor
-                0x00800364        0x1 main.o
-                0x00800364                current_floor
+                0x00800372        0x1 main.o
+                0x00800372                current_floor
  *(COMMON)
-                0x00800365                PROVIDE (__bss_end, .)
-                0x0000078c                __data_load_start = LOADADDR (.data)
-                0x000008ee                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800373                PROVIDE (__bss_end, .)
+                0x0000079c                __data_load_start = LOADADDR (.data)
+                0x0000090c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800365        0x0
+.noinit         0x00800373        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800365                _end = .
+                0x00800373                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -561,51 +564,51 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xb0
+.debug_aranges  0x00000000       0xb8
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x40 keypad.o
  .debug_aranges
-                0x00000040       0x70 main.o
+                0x00000040       0x78 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1cbf
+.debug_info     0x00000000     0x1cff
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_info    0x00000bbc      0x283 keypad.o
- .debug_info    0x00000e3f      0xe80 main.o
+ .debug_info    0x00000e3f      0xec0 main.o
 
-.debug_abbrev   0x00000000      0xfa9
+.debug_abbrev   0x00000000      0xfdd
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0xb1a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_abbrev  0x00000b1a      0x137 keypad.o
- .debug_abbrev  0x00000c51      0x358 main.o
+ .debug_abbrev  0x00000c51      0x38c main.o
 
-.debug_line     0x00000000      0xa59
+.debug_line     0x00000000      0xa7a
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1fa C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_line    0x000001fa      0x2b8 keypad.o
- .debug_line    0x000004b2      0x5a7 main.o
+ .debug_line    0x000004b2      0x5c8 main.o
 
-.debug_frame    0x00000000      0x174
+.debug_frame    0x00000000      0x184
  *(.debug_frame)
  .debug_frame   0x00000000       0x64 keypad.o
- .debug_frame   0x00000064      0x110 main.o
+ .debug_frame   0x00000064      0x120 main.o
 
-.debug_str      0x00000000      0x73e
+.debug_str      0x00000000      0x74e
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .debug_str     0x000003e6      0x214 keypad.o
                                 0x248 (size before relaxing)
- .debug_str     0x000005fa      0x144 main.o
-                                0x326 (size before relaxing)
+ .debug_str     0x000005fa      0x154 main.o
+                                0x336 (size before relaxing)
 
-.debug_loc      0x00000000      0xaa4
+.debug_loc      0x00000000      0xaec
  *(.debug_loc)
  .debug_loc     0x00000000      0x2c5 keypad.o
- .debug_loc     0x000002c5      0x7df main.o
+ .debug_loc     0x000002c5      0x827 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -625,10 +628,10 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x90
+.debug_ranges   0x00000000       0x98
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x30 keypad.o
- .debug_ranges  0x00000030       0x60 main.o
+ .debug_ranges  0x00000030       0x68 main.o
 
 .debug_macro
  *(.debug_macro)

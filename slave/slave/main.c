@@ -1,7 +1,5 @@
 /*
  * slave.c
- *
- * Created: 25.3.2025 14.19.19
  * Author : roope
  
 ###################################
@@ -19,10 +17,6 @@
 #include <util/delay.h>
 #include <stdio.h>
 #include <avr/interrupt.h>
-
-// Global variable to handle door timing outside the ISR
-volatile uint32_t door_timer = 0;
-volatile uint8_t door_active = 0;
 
 void TWI_init(){
 	// Init the TWI Slave
@@ -48,9 +42,9 @@ ISR(TWI_vect){
 		} else if(command == 'S'){
 			PORTB &= ~(1 << MOVEMENT_LED); // Turn OFF movement LED
 		} else if (command == 'O') {
-			PORTB |= (1 << DOOR_LED);  // Turn on door LED
-			door_active = 1;
-			door_timer = 0;  // Reset timer
+			PORTB |= (1 << DOOR_LED);  // Turn ON door LED
+		} else if (command == 'C'){
+			PORTB &= ~(1 << DOOR_LED); // Turn OFF door LED
 		}
 		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
@@ -70,16 +64,7 @@ int main(void){
 	TWI_init();
 	
 	while (1){
-		// Handle door timing in the main loop
-		if (door_active) {
-			_delay_ms(10);  // Small delay for counting
-			door_timer += 10;
-			
-			if (door_timer >= 5000) {  // 5 seconds elapsed
-				PORTB &= ~(1 << DOOR_LED);  // Turn off door LED
-				door_active = 0;
-			}
-		}
+		
 	}
 	
 	return 0;
