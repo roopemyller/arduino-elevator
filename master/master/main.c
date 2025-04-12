@@ -10,36 +10,26 @@
  */ 
 #define F_CPU 16000000UL
 #define SLAVE_ADDRESS 0b1010111  // The address of the slave (UNO)
-
-// Button pins - Using actual Arduino Mega pin mappings
-// PL5 = Digital Pin 44
-// PL3 = Digital Pin 46
-// PL1 = Digital Pin 48
-#define MOVEMENT_BUTTON_PORT PORTL
-#define MOVEMENT_BUTTON_PIN PINL
-#define MOVEMENT_BUTTON_DDR DDRL
-#define MOVEMENT_BUTTON PL5
-
-#define STOP_BUTTON_PORT PORTL
-#define STOP_BUTTON_PIN PINL
-#define STOP_BUTTON_DDR DDRL
-#define STOP_BUTTON PL3
-
-#define DOOR_BUTTON_PORT PORTL
-#define DOOR_BUTTON_PIN PINL
-#define DOOR_BUTTON_DDR DDRL
-#define DOOR_BUTTON PL1
+#define BAUD 9600 // Baudrate for UART
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include "keypad.h"
+#include <stdio.h>
+#include <stdlib.h>
+//#include <util/setbaud.h>
 
 // Variables to track button states for debouncing
 volatile uint8_t prev_movement_state = 1;
 volatile uint8_t prev_stop_state = 1;
 volatile uint8_t prev_door_state = 1;
+volatile uint8_t current_floor = 0;
+volatile uint8_t current_state = 0;
+volatile uint8_t floors_to_travel = 0;
 
 // Function prototypes
+void setup(void);
 void TWI_init(void);
 uint8_t TWI_start(void);
 uint8_t TWI_write(uint8_t data);
@@ -49,84 +39,152 @@ void UART_send_char(unsigned char data);
 void UART_send_string(char* str);
 void send_command(char cmd);
 
+char key_str[4];
+
+char* ptr;
+
+
 int main(void) {
-    // Initialize UART for debugging
-    UART_init();
-    UART_send_string("I2C Master Test - FIXED VERSION\r\n");
-    
-    // Initialize TWI as master
-    TWI_init();
-    
-    // Set up button pins as inputs with pull-up resistors
-    MOVEMENT_BUTTON_DDR &= ~(1 << MOVEMENT_BUTTON);  // Set as input
-    MOVEMENT_BUTTON_PORT |= (1 << MOVEMENT_BUTTON);  // Enable pull-up
-    
-    STOP_BUTTON_DDR &= ~(1 << STOP_BUTTON);  // Set as input
-    STOP_BUTTON_PORT |= (1 << STOP_BUTTON);  // Enable pull-up
-    
-    DOOR_BUTTON_DDR &= ~(1 << DOOR_BUTTON);  // Set as input
-    DOOR_BUTTON_PORT |= (1 << DOOR_BUTTON);  // Enable pull-up
-    
-    UART_send_string("System ready. Press buttons to send commands to slave:\r\n");
-    UART_send_string("- Pin 2: Start elevator movement (M)\r\n");
-    UART_send_string("- Pin 3: Stop elevator (S)\r\n");
-    UART_send_string("- Pin 4: Open/close door (O)\r\n");
-    
-    // Print initial button states for debugging
-    UART_send_string("Initial button states: ");
-    UART_send_char((MOVEMENT_BUTTON_PIN & (1 << MOVEMENT_BUTTON)) ? '1' : '0');
-    UART_send_char((STOP_BUTTON_PIN & (1 << STOP_BUTTON)) ? '1' : '0');
-    UART_send_char((DOOR_BUTTON_PIN & (1 << DOOR_BUTTON)) ? '1' : '0');
-    UART_send_string("\r\n");
-    
+	
+	setup();
+	
+	char str[20];  // Varataan 16 muistipaikkaa stringille
+	char *str_ptr;        // Luodaan apumuuttuja pointerille stringiin.
+	str_ptr = str;
+	
     while (1) {
-        // Read current button states
-        uint8_t current_movement_state = (MOVEMENT_BUTTON_PIN & (1 << MOVEMENT_BUTTON)) ? 1 : 0;
-        uint8_t current_stop_state = (STOP_BUTTON_PIN & (1 << STOP_BUTTON)) ? 1 : 0;
-        uint8_t current_door_state = (DOOR_BUTTON_PIN & (1 << DOOR_BUTTON)) ? 1 : 0;
-        
-        // Check MOVEMENT button (detect falling edge: 1->0)
-        if (current_movement_state == 0 && prev_movement_state == 1) {
-            _delay_ms(20);  // Debounce
-            // Recheck after debounce
-            if ((MOVEMENT_BUTTON_PIN & (1 << MOVEMENT_BUTTON)) == 0) {
-                UART_send_string("Movement button pressed\r\n");
-                send_command('M');
-                _delay_ms(200);  // Prevent multiple triggers
-            }
-        }
-        
-        // Check STOP button (detect falling edge: 1->0)
-        if (current_stop_state == 0 && prev_stop_state == 1) {
-            _delay_ms(20);  // Debounce
-            // Recheck after debounce
-            if ((STOP_BUTTON_PIN & (1 << STOP_BUTTON)) == 0) {
-                UART_send_string("Stop button pressed\r\n");
-                send_command('S');
-                _delay_ms(200);  // Prevent multiple triggers
-            }
-        }
-        
-        // Check DOOR button (detect falling edge: 1->0)
-        if (current_door_state == 0 && prev_door_state == 1) {
-            _delay_ms(20);  // Debounce
-            // Recheck after debounce
-            if ((DOOR_BUTTON_PIN & (1 << DOOR_BUTTON)) == 0) {
-				UART_send_string("Door button pressed\r\n");
-				send_command('O');
-				_delay_ms(200);  // Prevent multiple triggers
-			}
+  	
+		uint8_t key_input = KEYPAD_GetKey();
+		
+		// Tallennetaan	kaapattu keypad painallus int ja str pointer muodossa	
+		if(key_input != 0){ // Jos painiketta on painettu (ei ole 0)
+
+			key_input = key_input - '0';
+			itoa(key_input, str, 20);
+			UART_send_string("Pressed key: ");
+			UART_send_string(str);
+			UART_send_string ("\r\n");
+			
+		} else continue;
+		
+		// Define next state
+		if(current_floor < key_input)	{ current_state = 1; }
+		if(current_floor == key_input)	{ current_state = 2; }
+		if(current_floor > key_input)	{ current_state = 3; }
+		
+		floors_to_travel = abs(current_floor - key_input);
+		
+		// Debug:
+		UART_send_string("Current floor: ");
+		itoa(current_floor, str, 20);
+		UART_send_string(str);
+		UART_send_string(", Floors to travel: ");
+		itoa(floors_to_travel, str, 20);
+		UART_send_string(str);
+		UART_send_string("\r\n");
+		
+		switch(current_state){
+			case 1:
+			
+				_delay_ms(20);  // Debounce
+    
+				UART_send_string("Going up!\r\n");
+				// send_command('M');
+				
+				for(int i = 0; i < floors_to_travel; i++){
+					current_floor++;
+					UART_send_string("Moving to floor: ");
+					itoa(current_floor, str, 10);
+					UART_send_string(str);
+					UART_send_string("\r\n");
+					_delay_ms(200);
+				}
+				
+				// send_command('S');
+				UART_send_string("Door open!\r\n");
+	            // send_command('O');
+				_delay_ms(200);  // Prevent multiple triggers				
+				break;
+			
+			case 2:
+			
+				_delay_ms(20);  // Debounce
+			
+				UART_send_string("No action.\r\n");
+				// send_command('S');
+				
+				UART_send_string("Door open!\r\n");
+	            // send_command('O');
+				_delay_ms(200);  // Prevent multiple triggers			
+				break;
+				
+			case 3:
+			
+	            _delay_ms(20);  // Debounce
+	            UART_send_string("Going down!\r\n");
+				// send_command('M');
+				for(int i = 0; i < floors_to_travel; i++){
+					current_floor--;
+					UART_send_string("Moving to floor: ");
+					itoa(current_floor, str, 10);
+					UART_send_string(str);
+					UART_send_string("\r\n");
+					_delay_ms(200);						
+				}
+				
+				// send_command('S');
+				UART_send_string("Door open!\r\n");
+				// send_command('O');
+	            _delay_ms(200);  // Prevent multiple triggers	
+				break;
 		}
-
-		// Update previous states
-		prev_movement_state = current_movement_state;
-		prev_stop_state = current_stop_state;
-		prev_door_state = current_door_state;
-
+		
 		// Small delay
 		_delay_ms(10);
 	}
 	return 0;
+}
+
+void setup(){
+	// Init LCD
+	// Initialize UART for debugging
+	UART_init();
+	_delay_ms(20);
+	UART_send_string("Elevator Master Program - NASA SERTIFIED PRODUCT\r\n");
+	
+	// Initialize TWI as master
+	TWI_init();
+	_delay_ms(20);    
+	// Init keypad
+	KEYPAD_Init();
+	_delay_ms(20);
+}
+
+char* get_key_pressed(){
+	// Read raw signal from keypad
+	uint8_t key_signal = KEYPAD_GetKey();
+
+	_delay_ms(300);
+
+	// Check for valid key press
+	if (key_signal != 0xFF) { // Assuming 0xFF means no key pressed
+		char key_str[4];
+
+		// Check if it's a numeric key (1 to 9) or special key (A, B, C, D, *, #)
+		if (key_signal >= '1' && key_signal <= '9') {
+			// Convert key to numeric value
+			uint8_t key_value = key_signal - '0'; // Convert ASCII value to numeric value
+			itoa(key_value, key_str, 10); // Convert numeric value to string
+
+			} else {
+			// For special keys, just display the character
+			key_str[0] = key_signal;
+			key_str[1] = '\0'; // Null terminate the string
+		}
+		
+		ptr = key_str;
+	}
+	return ptr;
 }
 
 // Send a command to the slave device
