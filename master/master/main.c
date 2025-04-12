@@ -49,8 +49,8 @@ int main(void) {
 	setup();
 	
 	char str[20];  // Varataan 16 muistipaikkaa stringille
-	char *str_ptr;        // Luodaan apumuuttuja pointerille stringiin.
-	str_ptr = str;
+	// char *str_ptr;        // Luodaan apumuuttuja pointerille stringiin.
+	// str_ptr = str;
 	
     while (1) {
   	
@@ -75,6 +75,7 @@ int main(void) {
 		floors_to_travel = abs(current_floor - key_input);
 		
 		// Debug:
+		
 		UART_send_string("Current floor: ");
 		itoa(current_floor, str, 20);
 		UART_send_string(str);
@@ -89,7 +90,7 @@ int main(void) {
 				_delay_ms(20);  // Debounce
     
 				UART_send_string("Going up!\r\n");
-				// send_command('M');
+				send_command('M');
 				
 				for(int i = 0; i < floors_to_travel; i++){
 					current_floor++;
@@ -100,9 +101,9 @@ int main(void) {
 					_delay_ms(200);
 				}
 				
-				// send_command('S');
+				send_command('S');
 				UART_send_string("Door open!\r\n");
-	            // send_command('O');
+	            send_command('O');
 				_delay_ms(200);  // Prevent multiple triggers				
 				break;
 			
@@ -111,10 +112,10 @@ int main(void) {
 				_delay_ms(20);  // Debounce
 			
 				UART_send_string("No action.\r\n");
-				// send_command('S');
+				send_command('S');
 				
 				UART_send_string("Door open!\r\n");
-	            // send_command('O');
+	            send_command('O');
 				_delay_ms(200);  // Prevent multiple triggers			
 				break;
 				
@@ -122,7 +123,7 @@ int main(void) {
 			
 	            _delay_ms(20);  // Debounce
 	            UART_send_string("Going down!\r\n");
-				// send_command('M');
+				send_command('M');
 				for(int i = 0; i < floors_to_travel; i++){
 					current_floor--;
 					UART_send_string("Moving to floor: ");
@@ -132,9 +133,9 @@ int main(void) {
 					_delay_ms(200);						
 				}
 				
-				// send_command('S');
+				send_command('S');
 				UART_send_string("Door open!\r\n");
-				// send_command('O');
+				send_command('O');
 	            _delay_ms(200);  // Prevent multiple triggers	
 				break;
 		}
@@ -177,9 +178,9 @@ char* get_key_pressed(){
 			itoa(key_value, key_str, 10); // Convert numeric value to string
 
 			} else {
-			// For special keys, just display the character
-			key_str[0] = key_signal;
-			key_str[1] = '\0'; // Null terminate the string
+				// For special keys, just display the character
+				key_str[0] = key_signal;
+				key_str[1] = '\0'; // Null terminate the string
 		}
 		
 		ptr = key_str;
@@ -197,24 +198,21 @@ void send_command(char cmd) {
 		UART_send_string("TWI started\r\n");
 		
 		if (TWI_write((SLAVE_ADDRESS << 1) | 0)) {  // SLA+W
-			UART_send_string("SLA+W sent\r\n");
-			
 			if (TWI_write(cmd)) {
 				UART_send_string("Command sent successfully\r\n");
 				// Flash an indicator LED on the master
 				PORTB |= (1 << PB7);  // Turn on LED on pin 13
 				_delay_ms(100);
 				PORTB &= ~(1 << PB7); // Turn off LED
-				} else {
+			} else {
 				UART_send_string("Failed to send command\r\n");
 			}
-			} else {
+		} else {
 			UART_send_string("Slave not responding\r\n");
-		}
-		
+		}		
 		TWI_stop();
 		UART_send_string("TWI stopped\r\n");
-		} else {
+	} else {
 		UART_send_string("TWI start failed\r\n");
 	}
 }
