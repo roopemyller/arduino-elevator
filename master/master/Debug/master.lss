@@ -1,0 +1,1129 @@
+
+master.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000016e  00800200  00000642  000006d6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000642  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          00000003  0080036e  0080036e  00000844  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000844  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000874  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000b0  00000000  00000000  000008b4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00001c4a  00000000  00000000  00000964  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000fa9  00000000  00000000  000025ae  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000a2f  00000000  00000000  00003557  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  00000174  00000000  00000000  00003f88  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000748  00000000  00000000  000040fc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000aa4  00000000  00000000  00004844  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000090  00000000  00000000  000052e8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	e9 c0       	rjmp	.+466    	; 0x1d4 <__ctors_end>
+   2:	00 00       	nop
+   4:	06 c1       	rjmp	.+524    	; 0x212 <__bad_interrupt>
+   6:	00 00       	nop
+   8:	04 c1       	rjmp	.+520    	; 0x212 <__bad_interrupt>
+   a:	00 00       	nop
+   c:	02 c1       	rjmp	.+516    	; 0x212 <__bad_interrupt>
+   e:	00 00       	nop
+  10:	00 c1       	rjmp	.+512    	; 0x212 <__bad_interrupt>
+  12:	00 00       	nop
+  14:	fe c0       	rjmp	.+508    	; 0x212 <__bad_interrupt>
+  16:	00 00       	nop
+  18:	fc c0       	rjmp	.+504    	; 0x212 <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	fa c0       	rjmp	.+500    	; 0x212 <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	f8 c0       	rjmp	.+496    	; 0x212 <__bad_interrupt>
+  22:	00 00       	nop
+  24:	f6 c0       	rjmp	.+492    	; 0x212 <__bad_interrupt>
+  26:	00 00       	nop
+  28:	f4 c0       	rjmp	.+488    	; 0x212 <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	f2 c0       	rjmp	.+484    	; 0x212 <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	f0 c0       	rjmp	.+480    	; 0x212 <__bad_interrupt>
+  32:	00 00       	nop
+  34:	ee c0       	rjmp	.+476    	; 0x212 <__bad_interrupt>
+  36:	00 00       	nop
+  38:	ec c0       	rjmp	.+472    	; 0x212 <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	ea c0       	rjmp	.+468    	; 0x212 <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	e8 c0       	rjmp	.+464    	; 0x212 <__bad_interrupt>
+  42:	00 00       	nop
+  44:	e6 c0       	rjmp	.+460    	; 0x212 <__bad_interrupt>
+  46:	00 00       	nop
+  48:	e4 c0       	rjmp	.+456    	; 0x212 <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	e2 c0       	rjmp	.+452    	; 0x212 <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	e0 c0       	rjmp	.+448    	; 0x212 <__bad_interrupt>
+  52:	00 00       	nop
+  54:	de c0       	rjmp	.+444    	; 0x212 <__bad_interrupt>
+  56:	00 00       	nop
+  58:	dc c0       	rjmp	.+440    	; 0x212 <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	da c0       	rjmp	.+436    	; 0x212 <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	d8 c0       	rjmp	.+432    	; 0x212 <__bad_interrupt>
+  62:	00 00       	nop
+  64:	d6 c0       	rjmp	.+428    	; 0x212 <__bad_interrupt>
+  66:	00 00       	nop
+  68:	d4 c0       	rjmp	.+424    	; 0x212 <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	d2 c0       	rjmp	.+420    	; 0x212 <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	d0 c0       	rjmp	.+416    	; 0x212 <__bad_interrupt>
+  72:	00 00       	nop
+  74:	ce c0       	rjmp	.+412    	; 0x212 <__bad_interrupt>
+  76:	00 00       	nop
+  78:	cc c0       	rjmp	.+408    	; 0x212 <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	ca c0       	rjmp	.+404    	; 0x212 <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	c8 c0       	rjmp	.+400    	; 0x212 <__bad_interrupt>
+  82:	00 00       	nop
+  84:	c6 c0       	rjmp	.+396    	; 0x212 <__bad_interrupt>
+  86:	00 00       	nop
+  88:	c4 c0       	rjmp	.+392    	; 0x212 <__bad_interrupt>
+  8a:	00 00       	nop
+  8c:	c2 c0       	rjmp	.+388    	; 0x212 <__bad_interrupt>
+  8e:	00 00       	nop
+  90:	c0 c0       	rjmp	.+384    	; 0x212 <__bad_interrupt>
+  92:	00 00       	nop
+  94:	be c0       	rjmp	.+380    	; 0x212 <__bad_interrupt>
+  96:	00 00       	nop
+  98:	bc c0       	rjmp	.+376    	; 0x212 <__bad_interrupt>
+  9a:	00 00       	nop
+  9c:	ba c0       	rjmp	.+372    	; 0x212 <__bad_interrupt>
+  9e:	00 00       	nop
+  a0:	b8 c0       	rjmp	.+368    	; 0x212 <__bad_interrupt>
+  a2:	00 00       	nop
+  a4:	b6 c0       	rjmp	.+364    	; 0x212 <__bad_interrupt>
+  a6:	00 00       	nop
+  a8:	b4 c0       	rjmp	.+360    	; 0x212 <__bad_interrupt>
+  aa:	00 00       	nop
+  ac:	b2 c0       	rjmp	.+356    	; 0x212 <__bad_interrupt>
+  ae:	00 00       	nop
+  b0:	b0 c0       	rjmp	.+352    	; 0x212 <__bad_interrupt>
+  b2:	00 00       	nop
+  b4:	ae c0       	rjmp	.+348    	; 0x212 <__bad_interrupt>
+  b6:	00 00       	nop
+  b8:	ac c0       	rjmp	.+344    	; 0x212 <__bad_interrupt>
+  ba:	00 00       	nop
+  bc:	aa c0       	rjmp	.+340    	; 0x212 <__bad_interrupt>
+  be:	00 00       	nop
+  c0:	a8 c0       	rjmp	.+336    	; 0x212 <__bad_interrupt>
+  c2:	00 00       	nop
+  c4:	a6 c0       	rjmp	.+332    	; 0x212 <__bad_interrupt>
+  c6:	00 00       	nop
+  c8:	a4 c0       	rjmp	.+328    	; 0x212 <__bad_interrupt>
+  ca:	00 00       	nop
+  cc:	a2 c0       	rjmp	.+324    	; 0x212 <__bad_interrupt>
+  ce:	00 00       	nop
+  d0:	a0 c0       	rjmp	.+320    	; 0x212 <__bad_interrupt>
+  d2:	00 00       	nop
+  d4:	9e c0       	rjmp	.+316    	; 0x212 <__bad_interrupt>
+  d6:	00 00       	nop
+  d8:	9c c0       	rjmp	.+312    	; 0x212 <__bad_interrupt>
+  da:	00 00       	nop
+  dc:	9a c0       	rjmp	.+308    	; 0x212 <__bad_interrupt>
+  de:	00 00       	nop
+  e0:	98 c0       	rjmp	.+304    	; 0x212 <__bad_interrupt>
+  e2:	00 00       	nop
+  e4:	7f 01       	movw	r14, r30
+  e6:	87 01       	movw	r16, r14
+  e8:	87 01       	movw	r16, r14
+  ea:	87 01       	movw	r16, r14
+  ec:	81 01       	movw	r16, r2
+  ee:	87 01       	movw	r16, r14
+  f0:	83 01       	movw	r16, r6
+  f2:	85 01       	movw	r16, r10
+  f4:	87 01       	movw	r16, r14
+  f6:	87 01       	movw	r16, r14
+  f8:	87 01       	movw	r16, r14
+  fa:	87 01       	movw	r16, r14
+  fc:	87 01       	movw	r16, r14
+  fe:	87 01       	movw	r16, r14
+ 100:	87 01       	movw	r16, r14
+ 102:	87 01       	movw	r16, r14
+ 104:	87 01       	movw	r16, r14
+ 106:	87 01       	movw	r16, r14
+ 108:	87 01       	movw	r16, r14
+ 10a:	87 01       	movw	r16, r14
+ 10c:	87 01       	movw	r16, r14
+ 10e:	87 01       	movw	r16, r14
+ 110:	87 01       	movw	r16, r14
+ 112:	87 01       	movw	r16, r14
+ 114:	87 01       	movw	r16, r14
+ 116:	87 01       	movw	r16, r14
+ 118:	87 01       	movw	r16, r14
+ 11a:	87 01       	movw	r16, r14
+ 11c:	87 01       	movw	r16, r14
+ 11e:	87 01       	movw	r16, r14
+ 120:	87 01       	movw	r16, r14
+ 122:	87 01       	movw	r16, r14
+ 124:	87 01       	movw	r16, r14
+ 126:	87 01       	movw	r16, r14
+ 128:	87 01       	movw	r16, r14
+ 12a:	87 01       	movw	r16, r14
+ 12c:	87 01       	movw	r16, r14
+ 12e:	87 01       	movw	r16, r14
+ 130:	87 01       	movw	r16, r14
+ 132:	87 01       	movw	r16, r14
+ 134:	87 01       	movw	r16, r14
+ 136:	87 01       	movw	r16, r14
+ 138:	87 01       	movw	r16, r14
+ 13a:	87 01       	movw	r16, r14
+ 13c:	87 01       	movw	r16, r14
+ 13e:	87 01       	movw	r16, r14
+ 140:	87 01       	movw	r16, r14
+ 142:	87 01       	movw	r16, r14
+ 144:	87 01       	movw	r16, r14
+ 146:	87 01       	movw	r16, r14
+ 148:	87 01       	movw	r16, r14
+ 14a:	87 01       	movw	r16, r14
+ 14c:	87 01       	movw	r16, r14
+ 14e:	87 01       	movw	r16, r14
+ 150:	87 01       	movw	r16, r14
+ 152:	87 01       	movw	r16, r14
+ 154:	87 01       	movw	r16, r14
+ 156:	87 01       	movw	r16, r14
+ 158:	87 01       	movw	r16, r14
+ 15a:	87 01       	movw	r16, r14
+ 15c:	87 01       	movw	r16, r14
+ 15e:	87 01       	movw	r16, r14
+ 160:	87 01       	movw	r16, r14
+ 162:	87 01       	movw	r16, r14
+ 164:	77 01       	movw	r14, r14
+ 166:	87 01       	movw	r16, r14
+ 168:	87 01       	movw	r16, r14
+ 16a:	87 01       	movw	r16, r14
+ 16c:	79 01       	movw	r14, r18
+ 16e:	87 01       	movw	r16, r14
+ 170:	7b 01       	movw	r14, r22
+ 172:	7d 01       	movw	r14, r26
+ 174:	87 01       	movw	r16, r14
+ 176:	87 01       	movw	r16, r14
+ 178:	87 01       	movw	r16, r14
+ 17a:	87 01       	movw	r16, r14
+ 17c:	87 01       	movw	r16, r14
+ 17e:	87 01       	movw	r16, r14
+ 180:	87 01       	movw	r16, r14
+ 182:	87 01       	movw	r16, r14
+ 184:	87 01       	movw	r16, r14
+ 186:	87 01       	movw	r16, r14
+ 188:	87 01       	movw	r16, r14
+ 18a:	87 01       	movw	r16, r14
+ 18c:	87 01       	movw	r16, r14
+ 18e:	87 01       	movw	r16, r14
+ 190:	87 01       	movw	r16, r14
+ 192:	87 01       	movw	r16, r14
+ 194:	87 01       	movw	r16, r14
+ 196:	87 01       	movw	r16, r14
+ 198:	87 01       	movw	r16, r14
+ 19a:	87 01       	movw	r16, r14
+ 19c:	87 01       	movw	r16, r14
+ 19e:	87 01       	movw	r16, r14
+ 1a0:	87 01       	movw	r16, r14
+ 1a2:	87 01       	movw	r16, r14
+ 1a4:	6f 01       	movw	r12, r30
+ 1a6:	87 01       	movw	r16, r14
+ 1a8:	87 01       	movw	r16, r14
+ 1aa:	87 01       	movw	r16, r14
+ 1ac:	71 01       	movw	r14, r2
+ 1ae:	87 01       	movw	r16, r14
+ 1b0:	73 01       	movw	r14, r6
+ 1b2:	75 01       	movw	r14, r10
+ 1b4:	87 01       	movw	r16, r14
+ 1b6:	87 01       	movw	r16, r14
+ 1b8:	87 01       	movw	r16, r14
+ 1ba:	87 01       	movw	r16, r14
+ 1bc:	87 01       	movw	r16, r14
+ 1be:	87 01       	movw	r16, r14
+ 1c0:	87 01       	movw	r16, r14
+ 1c2:	87 01       	movw	r16, r14
+ 1c4:	69 01       	movw	r12, r18
+ 1c6:	87 01       	movw	r16, r14
+ 1c8:	87 01       	movw	r16, r14
+ 1ca:	87 01       	movw	r16, r14
+ 1cc:	89 01       	movw	r16, r18
+ 1ce:	87 01       	movw	r16, r14
+ 1d0:	6b 01       	movw	r12, r22
+ 1d2:	6d 01       	movw	r12, r26
+
+000001d4 <__ctors_end>:
+ 1d4:	11 24       	eor	r1, r1
+ 1d6:	1f be       	out	0x3f, r1	; 63
+ 1d8:	cf ef       	ldi	r28, 0xFF	; 255
+ 1da:	d1 e2       	ldi	r29, 0x21	; 33
+ 1dc:	de bf       	out	0x3e, r29	; 62
+ 1de:	cd bf       	out	0x3d, r28	; 61
+ 1e0:	00 e0       	ldi	r16, 0x00	; 0
+ 1e2:	0c bf       	out	0x3c, r16	; 60
+
+000001e4 <__do_copy_data>:
+ 1e4:	13 e0       	ldi	r17, 0x03	; 3
+ 1e6:	a0 e0       	ldi	r26, 0x00	; 0
+ 1e8:	b2 e0       	ldi	r27, 0x02	; 2
+ 1ea:	e2 e4       	ldi	r30, 0x42	; 66
+ 1ec:	f6 e0       	ldi	r31, 0x06	; 6
+ 1ee:	00 e0       	ldi	r16, 0x00	; 0
+ 1f0:	0b bf       	out	0x3b, r16	; 59
+ 1f2:	02 c0       	rjmp	.+4      	; 0x1f8 <__do_copy_data+0x14>
+ 1f4:	07 90       	elpm	r0, Z+
+ 1f6:	0d 92       	st	X+, r0
+ 1f8:	ae 36       	cpi	r26, 0x6E	; 110
+ 1fa:	b1 07       	cpc	r27, r17
+ 1fc:	d9 f7       	brne	.-10     	; 0x1f4 <__do_copy_data+0x10>
+
+000001fe <__do_clear_bss>:
+ 1fe:	23 e0       	ldi	r18, 0x03	; 3
+ 200:	ae e6       	ldi	r26, 0x6E	; 110
+ 202:	b3 e0       	ldi	r27, 0x03	; 3
+ 204:	01 c0       	rjmp	.+2      	; 0x208 <.do_clear_bss_start>
+
+00000206 <.do_clear_bss_loop>:
+ 206:	1d 92       	st	X+, r1
+
+00000208 <.do_clear_bss_start>:
+ 208:	a1 37       	cpi	r26, 0x71	; 113
+ 20a:	b2 07       	cpc	r27, r18
+ 20c:	e1 f7       	brne	.-8      	; 0x206 <.do_clear_bss_loop>
+ 20e:	ca d0       	rcall	.+404    	; 0x3a4 <main>
+ 210:	16 c2       	rjmp	.+1068   	; 0x63e <_exit>
+
+00000212 <__bad_interrupt>:
+ 212:	f6 ce       	rjmp	.-532    	; 0x0 <__vectors>
+
+00000214 <keypad_ScanKey>:
+static uint8_t keypad_ScanKey()
+{
+
+	uint8_t var_keyScanCode_u8 = 0xEF,i, var_keyPress_u8;
+
+	for(i=0;i<0x04;i++)                // Scan All the 4-Rows for key press
+ 214:	20 e0       	ldi	r18, 0x00	; 0
+        4.Return the ScanCode(Combination of ROW & COL) for decoding the key.
+ ***************************************************************************************************/
+static uint8_t keypad_ScanKey()
+{
+
+	uint8_t var_keyScanCode_u8 = 0xEF,i, var_keyPress_u8;
+ 216:	9f ee       	ldi	r25, 0xEF	; 239
+
+	for(i=0;i<0x04;i++)                // Scan All the 4-Rows for key press
+ 218:	10 c0       	rjmp	.+32     	; 0x23a <keypad_ScanKey+0x26>
+	{
+		M_ROW=var_keyScanCode_u8;        // Select 1-Row at a time for Scanning the Key
+ 21a:	90 93 08 01 	sts	0x0108, r25	; 0x800108 <__TEXT_REGION_LENGTH__+0x7c0108>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 21e:	e9 ef       	ldi	r30, 0xF9	; 249
+ 220:	f0 e0       	ldi	r31, 0x00	; 0
+ 222:	31 97       	sbiw	r30, 0x01	; 1
+ 224:	f1 f7       	brne	.-4      	; 0x222 <keypad_ScanKey+0xe>
+ 226:	00 c0       	rjmp	.+0      	; 0x228 <keypad_ScanKey+0x14>
+ 228:	00 00       	nop
+		DELAY_ms(1);
+		var_keyPress_u8=M_COL & 0x0F;    // Read the Column, for key press
+ 22a:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__TEXT_REGION_LENGTH__+0x7c0106>
+ 22e:	8f 70       	andi	r24, 0x0F	; 15
+
+		if(var_keyPress_u8!=0x0F)        // If the KEY press is detected for the selected
+ 230:	8f 30       	cpi	r24, 0x0F	; 15
+ 232:	29 f4       	brne	.+10     	; 0x23e <keypad_ScanKey+0x2a>
+			break;                     // ROW then stop Scanning,
+
+		var_keyScanCode_u8=((var_keyScanCode_u8<<1)+0x01); // Rotate the ScanKey to SCAN the remaining Rows
+ 234:	99 0f       	add	r25, r25
+ 236:	9f 5f       	subi	r25, 0xFF	; 255
+static uint8_t keypad_ScanKey()
+{
+
+	uint8_t var_keyScanCode_u8 = 0xEF,i, var_keyPress_u8;
+
+	for(i=0;i<0x04;i++)                // Scan All the 4-Rows for key press
+ 238:	2f 5f       	subi	r18, 0xFF	; 255
+ 23a:	24 30       	cpi	r18, 0x04	; 4
+ 23c:	70 f3       	brcs	.-36     	; 0x21a <keypad_ScanKey+0x6>
+		if(var_keyPress_u8!=0x0F)        // If the KEY press is detected for the selected
+			break;                     // ROW then stop Scanning,
+
+		var_keyScanCode_u8=((var_keyScanCode_u8<<1)+0x01); // Rotate the ScanKey to SCAN the remaining Rows
+	}
+	var_keyPress_u8 = var_keyPress_u8 + (var_keyScanCode_u8 & 0xf0); // Return the row and COL status to decode the key
+ 23e:	90 7f       	andi	r25, 0xF0	; 240
+	return(var_keyPress_u8);
+}
+ 240:	89 0f       	add	r24, r25
+ 242:	08 95       	ret
+
+00000244 <KEYPAD_Init>:
+        1.ROW lines are configured as Output.
+        2.Column Lines are configured as Input.
+ ***************************************************************************************************/
+void KEYPAD_Init()
+{
+	M_RowColDirection= C_RowOutputColInput_U8; // Configure Row lines as O/P and Column lines as I/P
+ 244:	80 ef       	ldi	r24, 0xF0	; 240
+ 246:	80 93 07 01 	sts	0x0107, r24	; 0x800107 <__TEXT_REGION_LENGTH__+0x7c0107>
+ 24a:	08 95       	ret
+
+0000024c <KEYPAD_WaitForKeyRelease>:
+	uint8_t key;
+	do
+	{
+		do
+		{
+			M_ROW=0x0F;           // Pull the ROW lines to low and Column lines high.
+ 24c:	8f e0       	ldi	r24, 0x0F	; 15
+ 24e:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <__TEXT_REGION_LENGTH__+0x7c0108>
+			key=M_COL & 0x0F;     // Read the Columns, to check the key press
+ 252:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__TEXT_REGION_LENGTH__+0x7c0106>
+ 256:	8f 70       	andi	r24, 0x0F	; 15
+		}while(key!=0x0F);
+ 258:	8f 30       	cpi	r24, 0x0F	; 15
+ 25a:	c1 f7       	brne	.-16     	; 0x24c <KEYPAD_WaitForKeyRelease>
+ 25c:	89 ef       	ldi	r24, 0xF9	; 249
+ 25e:	90 e0       	ldi	r25, 0x00	; 0
+ 260:	01 97       	sbiw	r24, 0x01	; 1
+ 262:	f1 f7       	brne	.-4      	; 0x260 <KEYPAD_WaitForKeyRelease+0x14>
+ 264:	00 c0       	rjmp	.+0      	; 0x266 <KEYPAD_WaitForKeyRelease+0x1a>
+ 266:	00 00       	nop
+
+		DELAY_ms(1);
+
+		M_ROW=0x0F;           // Pull the ROW lines to low and Column lines high.
+ 268:	8f e0       	ldi	r24, 0x0F	; 15
+ 26a:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <__TEXT_REGION_LENGTH__+0x7c0108>
+		key=M_COL & 0x0F;     // Read the Columns, to check the key press
+ 26e:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__TEXT_REGION_LENGTH__+0x7c0106>
+ 272:	8f 70       	andi	r24, 0x0F	; 15
+	}while(key!=0x0F);   // Wait till the Key is released,
+ 274:	8f 30       	cpi	r24, 0x0F	; 15
+ 276:	51 f7       	brne	.-44     	; 0x24c <KEYPAD_WaitForKeyRelease>
+	                     // If no Key is pressed, Column lines will be High(0x0F)
+}
+ 278:	08 95       	ret
+
+0000027a <KEYPAD_WaitForKeyPress>:
+	uint8_t var_keyPress_u8;
+	do
+	{
+		do
+		{
+			M_ROW=0x0F;		  // Pull the ROW lines to low and Column lines high.
+ 27a:	8f e0       	ldi	r24, 0x0F	; 15
+ 27c:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <__TEXT_REGION_LENGTH__+0x7c0108>
+			var_keyPress_u8=M_COL & 0x0F;	  // Read the Columns, to check the key press
+ 280:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__TEXT_REGION_LENGTH__+0x7c0106>
+ 284:	8f 70       	andi	r24, 0x0F	; 15
+		}while(var_keyPress_u8==0x0F); // Wait till the Key is pressed,
+ 286:	8f 30       	cpi	r24, 0x0F	; 15
+ 288:	c1 f3       	breq	.-16     	; 0x27a <KEYPAD_WaitForKeyPress>
+ 28a:	89 ef       	ldi	r24, 0xF9	; 249
+ 28c:	90 e0       	ldi	r25, 0x00	; 0
+ 28e:	01 97       	sbiw	r24, 0x01	; 1
+ 290:	f1 f7       	brne	.-4      	; 0x28e <KEYPAD_WaitForKeyPress+0x14>
+ 292:	00 c0       	rjmp	.+0      	; 0x294 <KEYPAD_WaitForKeyPress+0x1a>
+ 294:	00 00       	nop
+		// if a Key is pressed the corresponding Column line go low
+
+		DELAY_ms(1);		  // Wait for some time(debounce Time);
+
+		M_ROW=0x0F;		  // After debounce time, perform the above operation
+ 296:	8f e0       	ldi	r24, 0x0F	; 15
+ 298:	80 93 08 01 	sts	0x0108, r24	; 0x800108 <__TEXT_REGION_LENGTH__+0x7c0108>
+		var_keyPress_u8=M_COL & 0x0F;	  // to ensure the Key press.
+ 29c:	80 91 06 01 	lds	r24, 0x0106	; 0x800106 <__TEXT_REGION_LENGTH__+0x7c0106>
+ 2a0:	8f 70       	andi	r24, 0x0F	; 15
+
+	}while(var_keyPress_u8==0x0F);
+ 2a2:	8f 30       	cpi	r24, 0x0F	; 15
+ 2a4:	51 f3       	breq	.-44     	; 0x27a <KEYPAD_WaitForKeyPress>
+}
+ 2a6:	08 95       	ret
+
+000002a8 <KEYPAD_GetKey>:
+ ***************************************************************************************************/
+uint8_t KEYPAD_GetKey()
+{
+	uint8_t var_keyPress_u8;
+
+	KEYPAD_WaitForKeyRelease();    // Wait for the previous key release
+ 2a8:	d1 df       	rcall	.-94     	; 0x24c <KEYPAD_WaitForKeyRelease>
+ 2aa:	89 ef       	ldi	r24, 0xF9	; 249
+ 2ac:	90 e0       	ldi	r25, 0x00	; 0
+ 2ae:	01 97       	sbiw	r24, 0x01	; 1
+ 2b0:	f1 f7       	brne	.-4      	; 0x2ae <KEYPAD_GetKey+0x6>
+ 2b2:	00 c0       	rjmp	.+0      	; 0x2b4 <KEYPAD_GetKey+0xc>
+	DELAY_ms(1);
+
+	KEYPAD_WaitForKeyPress();      // Wait for the new key press
+ 2b4:	00 00       	nop
+	var_keyPress_u8 = keypad_ScanKey();        // Scan for the key pressed.
+ 2b6:	e1 df       	rcall	.-62     	; 0x27a <KEYPAD_WaitForKeyPress>
+ 2b8:	ad df       	rcall	.-166    	; 0x214 <keypad_ScanKey>
+
+	switch(var_keyPress_u8)                       // Decode the key
+ 2ba:	90 e0       	ldi	r25, 0x00	; 0
+ 2bc:	fc 01       	movw	r30, r24
+ 2be:	e7 57       	subi	r30, 0x77	; 119
+ 2c0:	f1 09       	sbc	r31, r1
+ 2c2:	e8 37       	cpi	r30, 0x78	; 120
+ 2c4:	f1 05       	cpc	r31, r1
+ 2c6:	18 f5       	brcc	.+70     	; 0x30e <KEYPAD_GetKey+0x66>
+ 2c8:	88 27       	eor	r24, r24
+ 2ca:	ee 58       	subi	r30, 0x8E	; 142
+ 2cc:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2ce:	8f 4f       	sbci	r24, 0xFF	; 255
+ 2d0:	7b c1       	rjmp	.+758    	; 0x5c8 <__tablejump2__>
+	{
+	case 0xe7: var_keyPress_u8='*'; break; 
+ 2d2:	8a e2       	ldi	r24, 0x2A	; 42
+ 2d4:	08 95       	ret
+	case 0xeb: var_keyPress_u8='7'; break; 
+	case 0xed: var_keyPress_u8='4'; break; 
+ 2d6:	84 e3       	ldi	r24, 0x34	; 52
+ 2d8:	08 95       	ret
+	case 0xee: var_keyPress_u8='1'; break; 
+ 2da:	81 e3       	ldi	r24, 0x31	; 49
+ 2dc:	08 95       	ret
+	case 0xd7: var_keyPress_u8='0'; break; 
+ 2de:	80 e3       	ldi	r24, 0x30	; 48
+ 2e0:	08 95       	ret
+	case 0xdb: var_keyPress_u8='8'; break; 
+ 2e2:	88 e3       	ldi	r24, 0x38	; 56
+ 2e4:	08 95       	ret
+	case 0xdd: var_keyPress_u8='5'; break; 
+ 2e6:	85 e3       	ldi	r24, 0x35	; 53
+ 2e8:	08 95       	ret
+	case 0xde: var_keyPress_u8='2'; break; 
+ 2ea:	82 e3       	ldi	r24, 0x32	; 50
+ 2ec:	08 95       	ret
+	case 0xb7: var_keyPress_u8='#'; break; 
+ 2ee:	83 e2       	ldi	r24, 0x23	; 35
+ 2f0:	08 95       	ret
+	case 0xbb: var_keyPress_u8='9'; break; 
+ 2f2:	89 e3       	ldi	r24, 0x39	; 57
+ 2f4:	08 95       	ret
+	case 0xbd: var_keyPress_u8='6'; break; 
+ 2f6:	86 e3       	ldi	r24, 0x36	; 54
+ 2f8:	08 95       	ret
+	case 0xbe: var_keyPress_u8='3'; break; 
+ 2fa:	83 e3       	ldi	r24, 0x33	; 51
+ 2fc:	08 95       	ret
+	case 0x77: var_keyPress_u8='D'; break;  
+ 2fe:	84 e4       	ldi	r24, 0x44	; 68
+ 300:	08 95       	ret
+	case 0x7b: var_keyPress_u8='C'; break;  
+ 302:	83 e4       	ldi	r24, 0x43	; 67
+ 304:	08 95       	ret
+	case 0x7d: var_keyPress_u8='B'; break;  
+ 306:	82 e4       	ldi	r24, 0x42	; 66
+ 308:	08 95       	ret
+	case 0x7e: var_keyPress_u8='A'; break;  
+ 30a:	81 e4       	ldi	r24, 0x41	; 65
+ 30c:	08 95       	ret
+	default  : var_keyPress_u8='z'; break;
+ 30e:	8a e7       	ldi	r24, 0x7A	; 122
+ 310:	08 95       	ret
+	var_keyPress_u8 = keypad_ScanKey();        // Scan for the key pressed.
+
+	switch(var_keyPress_u8)                       // Decode the key
+	{
+	case 0xe7: var_keyPress_u8='*'; break; 
+	case 0xeb: var_keyPress_u8='7'; break; 
+ 312:	87 e3       	ldi	r24, 0x37	; 55
+	case 0x7d: var_keyPress_u8='B'; break;  
+	case 0x7e: var_keyPress_u8='A'; break;  
+	default  : var_keyPress_u8='z'; break;
+	}
+	return(var_keyPress_u8);                      // Return the key
+}
+ 314:	08 95       	ret
+
+00000316 <TWI_init>:
+ 316:	88 e4       	ldi	r24, 0x48	; 72
+ 318:	80 93 b8 00 	sts	0x00B8, r24	; 0x8000b8 <__TEXT_REGION_LENGTH__+0x7c00b8>
+ 31c:	10 92 b9 00 	sts	0x00B9, r1	; 0x8000b9 <__TEXT_REGION_LENGTH__+0x7c00b9>
+ 320:	08 95       	ret
+
+00000322 <UART_init>:
+}
+
+// Initialize UART for debugging
+void UART_init(void) {
+	// Set baud rate to 9600 for 16MHz: UBRR = (F_CPU/(16*BAUD))-1 = 103
+	UBRR0H = 0;
+ 322:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7c00c5>
+	UBRR0L = 103;
+ 326:	87 e6       	ldi	r24, 0x67	; 103
+ 328:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7c00c4>
+	
+	// Enable transmitter
+	UCSR0B = (1 << TXEN0);
+ 32c:	88 e0       	ldi	r24, 0x08	; 8
+ 32e:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7c00c1>
+	
+	// Set frame format: 8 data bits, 1 stop bit, no parity
+	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+ 332:	86 e0       	ldi	r24, 0x06	; 6
+ 334:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7c00c2>
+ 338:	08 95       	ret
+
+0000033a <UART_send_char>:
+}
+
+// Send a character through UART
+void UART_send_char(unsigned char data) {
+	// Wait for empty transmit buffer
+	while (!(UCSR0A & (1 << UDRE0)));
+ 33a:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7c00c0>
+ 33e:	95 ff       	sbrs	r25, 5
+ 340:	fc cf       	rjmp	.-8      	; 0x33a <UART_send_char>
+	
+	// Put data into buffer
+	UDR0 = data;
+ 342:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7c00c6>
+ 346:	08 95       	ret
+
+00000348 <UART_send_string>:
+}
+
+// Send a string through UART
+void UART_send_string(char* str) {
+ 348:	cf 93       	push	r28
+ 34a:	df 93       	push	r29
+ 34c:	ec 01       	movw	r28, r24
+	// Send each character until null terminator
+	while (*str) {
+ 34e:	02 c0       	rjmp	.+4      	; 0x354 <UART_send_string+0xc>
+		UART_send_char(*str++);
+ 350:	21 96       	adiw	r28, 0x01	; 1
+ 352:	f3 df       	rcall	.-26     	; 0x33a <UART_send_char>
+}
+
+// Send a string through UART
+void UART_send_string(char* str) {
+	// Send each character until null terminator
+	while (*str) {
+ 354:	88 81       	ld	r24, Y
+ 356:	81 11       	cpse	r24, r1
+ 358:	fb cf       	rjmp	.-10     	; 0x350 <UART_send_string+0x8>
+		UART_send_char(*str++);
+	}
+ 35a:	df 91       	pop	r29
+ 35c:	cf 91       	pop	r28
+ 35e:	08 95       	ret
+
+00000360 <setup>:
+}
+
+void setup(){
+	// Init LCD
+	// Initialize UART for debugging
+	UART_init();
+ 360:	e0 df       	rcall	.-64     	; 0x322 <UART_init>
+ 362:	2f ef       	ldi	r18, 0xFF	; 255
+ 364:	89 ef       	ldi	r24, 0xF9	; 249
+ 366:	90 e0       	ldi	r25, 0x00	; 0
+ 368:	21 50       	subi	r18, 0x01	; 1
+ 36a:	80 40       	sbci	r24, 0x00	; 0
+ 36c:	90 40       	sbci	r25, 0x00	; 0
+ 36e:	e1 f7       	brne	.-8      	; 0x368 <setup+0x8>
+ 370:	00 c0       	rjmp	.+0      	; 0x372 <setup+0x12>
+ 372:	00 00       	nop
+	_delay_ms(20);
+	UART_send_string("Elevator Master Program - NASA SERTIFIED PRODUCT\r\n");
+ 374:	80 e0       	ldi	r24, 0x00	; 0
+ 376:	92 e0       	ldi	r25, 0x02	; 2
+	
+	// Initialize TWI as master
+	TWI_init();
+ 378:	e7 df       	rcall	.-50     	; 0x348 <UART_send_string>
+ 37a:	cd df       	rcall	.-102    	; 0x316 <TWI_init>
+ 37c:	2f ef       	ldi	r18, 0xFF	; 255
+ 37e:	89 ef       	ldi	r24, 0xF9	; 249
+ 380:	90 e0       	ldi	r25, 0x00	; 0
+ 382:	21 50       	subi	r18, 0x01	; 1
+ 384:	80 40       	sbci	r24, 0x00	; 0
+ 386:	90 40       	sbci	r25, 0x00	; 0
+ 388:	e1 f7       	brne	.-8      	; 0x382 <setup+0x22>
+ 38a:	00 c0       	rjmp	.+0      	; 0x38c <setup+0x2c>
+	_delay_ms(20);    
+	// Init keypad
+	KEYPAD_Init();
+ 38c:	00 00       	nop
+ 38e:	5a df       	rcall	.-332    	; 0x244 <KEYPAD_Init>
+ 390:	2f ef       	ldi	r18, 0xFF	; 255
+ 392:	89 ef       	ldi	r24, 0xF9	; 249
+ 394:	90 e0       	ldi	r25, 0x00	; 0
+ 396:	21 50       	subi	r18, 0x01	; 1
+ 398:	80 40       	sbci	r24, 0x00	; 0
+ 39a:	90 40       	sbci	r25, 0x00	; 0
+ 39c:	e1 f7       	brne	.-8      	; 0x396 <setup+0x36>
+ 39e:	00 c0       	rjmp	.+0      	; 0x3a0 <setup+0x40>
+ 3a0:	00 00       	nop
+ 3a2:	08 95       	ret
+
+000003a4 <main>:
+char key_str[4];
+
+char* ptr;
+
+
+int main(void) {
+ 3a4:	cf 93       	push	r28
+ 3a6:	df 93       	push	r29
+ 3a8:	cd b7       	in	r28, 0x3d	; 61
+ 3aa:	de b7       	in	r29, 0x3e	; 62
+ 3ac:	6e 97       	sbiw	r28, 0x1e	; 30
+ 3ae:	0f b6       	in	r0, 0x3f	; 63
+ 3b0:	f8 94       	cli
+ 3b2:	de bf       	out	0x3e, r29	; 62
+ 3b4:	0f be       	out	0x3f, r0	; 63
+ 3b6:	cd bf       	out	0x3d, r28	; 61
+	
+	setup();
+ 3b8:	d3 df       	rcall	.-90     	; 0x360 <setup>
+	char *str_ptr;        // Luodaan apumuuttuja pointerille stringiin.
+	str_ptr = str;
+	
+    while (1) {
+  	
+		uint8_t key_input = KEYPAD_GetKey();
+ 3ba:	76 df       	rcall	.-276    	; 0x2a8 <KEYPAD_GetKey>
+ 3bc:	88 23       	and	r24, r24
+		
+		// Tallennetaan	kaapattu keypad painallus int ja str pointer muodossa	
+		if(key_input != 0){ // Jos painiketta on painettu (ei ole 0)
+ 3be:	e9 f3       	breq	.-6      	; 0x3ba <main+0x16>
+ 3c0:	10 ed       	ldi	r17, 0xD0	; 208
+
+			key_input = key_input - '0';
+ 3c2:	18 0f       	add	r17, r24
+ 3c4:	e1 2e       	mov	r14, r17
+			itoa(key_input, str, 10);
+ 3c6:	f1 2c       	mov	r15, r1
+ 3c8:	4a e0       	ldi	r20, 0x0A	; 10
+    } else if (__radix < 2 || __radix > 36) {
+	*__s = 0;
+	return __s;
+    } else {
+	extern char *__itoa_ncheck (int, char *, unsigned char);
+	return __itoa_ncheck (__val, __s, __radix);
+ 3ca:	be 01       	movw	r22, r28
+ 3cc:	6f 5f       	subi	r22, 0xFF	; 255
+ 3ce:	7f 4f       	sbci	r23, 0xFF	; 255
+ 3d0:	c7 01       	movw	r24, r14
+ 3d2:	02 d1       	rcall	.+516    	; 0x5d8 <__itoa_ncheck>
+ 3d4:	83 e3       	ldi	r24, 0x33	; 51
+			UART_send_string("Pressed key: ");
+ 3d6:	92 e0       	ldi	r25, 0x02	; 2
+ 3d8:	b7 df       	rcall	.-146    	; 0x348 <UART_send_string>
+ 3da:	ce 01       	movw	r24, r28
+			UART_send_string(str);
+ 3dc:	01 96       	adiw	r24, 0x01	; 1
+ 3de:	b4 df       	rcall	.-152    	; 0x348 <UART_send_string>
+ 3e0:	8e e8       	ldi	r24, 0x8E	; 142
+			UART_send_string ("\r\n");
+ 3e2:	92 e0       	ldi	r25, 0x02	; 2
+ 3e4:	b1 df       	rcall	.-158    	; 0x348 <UART_send_string>
+ 3e6:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+			
+		} else continue;
+		
+		// Define next state
+		if(current_floor < key_input)	{ current_state = 1; }
+ 3ea:	81 17       	cp	r24, r17
+ 3ec:	18 f4       	brcc	.+6      	; 0x3f4 <main+0x50>
+ 3ee:	81 e0       	ldi	r24, 0x01	; 1
+ 3f0:	80 93 6f 03 	sts	0x036F, r24	; 0x80036f <current_state>
+ 3f4:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+		if(current_floor == key_input)	{ current_state = 2; }
+ 3f8:	18 13       	cpse	r17, r24
+ 3fa:	03 c0       	rjmp	.+6      	; 0x402 <__LOCK_REGION_LENGTH__+0x2>
+ 3fc:	82 e0       	ldi	r24, 0x02	; 2
+ 3fe:	80 93 6f 03 	sts	0x036F, r24	; 0x80036f <current_state>
+ 402:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+		if(current_floor > key_input)	{ current_state = 3; }
+ 406:	18 17       	cp	r17, r24
+ 408:	18 f4       	brcc	.+6      	; 0x410 <__LOCK_REGION_LENGTH__+0x10>
+ 40a:	83 e0       	ldi	r24, 0x03	; 3
+ 40c:	80 93 6f 03 	sts	0x036F, r24	; 0x80036f <current_state>
+ 410:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+		
+		floors_to_travel = abs(current_floor - key_input);
+ 414:	90 e0       	ldi	r25, 0x00	; 0
+ 416:	8e 19       	sub	r24, r14
+ 418:	9f 09       	sbc	r25, r15
+ 41a:	9c 01       	movw	r18, r24
+ 41c:	22 f4       	brpl	.+8      	; 0x426 <__LOCK_REGION_LENGTH__+0x26>
+ 41e:	22 27       	eor	r18, r18
+ 420:	33 27       	eor	r19, r19
+ 422:	28 1b       	sub	r18, r24
+ 424:	39 0b       	sbc	r19, r25
+ 426:	20 93 6e 03 	sts	0x036E, r18	; 0x80036e <__data_end>
+ 42a:	81 e4       	ldi	r24, 0x41	; 65
+		
+		// Debug:
+		UART_send_string("Current floor: ");
+ 42c:	92 e0       	ldi	r25, 0x02	; 2
+ 42e:	8c df       	rcall	.-232    	; 0x348 <UART_send_string>
+ 430:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+		itoa(current_floor, str, 10);
+ 434:	4a e0       	ldi	r20, 0x0A	; 10
+ 436:	be 01       	movw	r22, r28
+ 438:	6f 5f       	subi	r22, 0xFF	; 255
+ 43a:	7f 4f       	sbci	r23, 0xFF	; 255
+ 43c:	90 e0       	ldi	r25, 0x00	; 0
+ 43e:	cc d0       	rcall	.+408    	; 0x5d8 <__itoa_ncheck>
+		UART_send_string(str);
+ 440:	ce 01       	movw	r24, r28
+ 442:	01 96       	adiw	r24, 0x01	; 1
+ 444:	81 df       	rcall	.-254    	; 0x348 <UART_send_string>
+ 446:	81 e5       	ldi	r24, 0x51	; 81
+		UART_send_string(", Floors to travel: ");
+ 448:	92 e0       	ldi	r25, 0x02	; 2
+ 44a:	7e df       	rcall	.-260    	; 0x348 <UART_send_string>
+ 44c:	80 91 6e 03 	lds	r24, 0x036E	; 0x80036e <__data_end>
+ 450:	4a e0       	ldi	r20, 0x0A	; 10
+ 452:	be 01       	movw	r22, r28
+ 454:	6f 5f       	subi	r22, 0xFF	; 255
+ 456:	7f 4f       	sbci	r23, 0xFF	; 255
+ 458:	90 e0       	ldi	r25, 0x00	; 0
+ 45a:	be d0       	rcall	.+380    	; 0x5d8 <__itoa_ncheck>
+		itoa(floors_to_travel, str, 10);
+		UART_send_string(str);
+ 45c:	ce 01       	movw	r24, r28
+ 45e:	01 96       	adiw	r24, 0x01	; 1
+ 460:	73 df       	rcall	.-282    	; 0x348 <UART_send_string>
+ 462:	8e e8       	ldi	r24, 0x8E	; 142
+		UART_send_string("\r\n");
+ 464:	92 e0       	ldi	r25, 0x02	; 2
+ 466:	70 df       	rcall	.-288    	; 0x348 <UART_send_string>
+ 468:	80 91 6f 03 	lds	r24, 0x036F	; 0x80036f <current_state>
+		
+		switch(current_state){
+ 46c:	82 30       	cpi	r24, 0x02	; 2
+ 46e:	09 f4       	brne	.+2      	; 0x472 <__LOCK_REGION_LENGTH__+0x72>
+ 470:	49 c0       	rjmp	.+146    	; 0x504 <__LOCK_REGION_LENGTH__+0x104>
+ 472:	83 30       	cpi	r24, 0x03	; 3
+ 474:	09 f4       	brne	.+2      	; 0x478 <__LOCK_REGION_LENGTH__+0x78>
+ 476:	5f c0       	rjmp	.+190    	; 0x536 <__LOCK_REGION_LENGTH__+0x136>
+ 478:	81 30       	cpi	r24, 0x01	; 1
+ 47a:	09 f0       	breq	.+2      	; 0x47e <__LOCK_REGION_LENGTH__+0x7e>
+ 47c:	9e c0       	rjmp	.+316    	; 0x5ba <__LOCK_REGION_LENGTH__+0x1ba>
+ 47e:	2f ef       	ldi	r18, 0xFF	; 255
+ 480:	89 ef       	ldi	r24, 0xF9	; 249
+ 482:	90 e0       	ldi	r25, 0x00	; 0
+ 484:	21 50       	subi	r18, 0x01	; 1
+ 486:	80 40       	sbci	r24, 0x00	; 0
+ 488:	90 40       	sbci	r25, 0x00	; 0
+ 48a:	e1 f7       	brne	.-8      	; 0x484 <__LOCK_REGION_LENGTH__+0x84>
+ 48c:	00 c0       	rjmp	.+0      	; 0x48e <__LOCK_REGION_LENGTH__+0x8e>
+ 48e:	00 00       	nop
+ 490:	86 e6       	ldi	r24, 0x66	; 102
+			case 1:
+			
+				_delay_ms(20);  // Debounce
+    
+				UART_send_string("Going up!\r\n");
+ 492:	92 e0       	ldi	r25, 0x02	; 2
+ 494:	59 df       	rcall	.-334    	; 0x348 <UART_send_string>
+ 496:	00 e0       	ldi	r16, 0x00	; 0
+				// send_command('M');
+				
+				for(int i = 0; i < floors_to_travel; i++){
+ 498:	10 e0       	ldi	r17, 0x00	; 0
+ 49a:	21 c0       	rjmp	.+66     	; 0x4de <__LOCK_REGION_LENGTH__+0xde>
+ 49c:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+					current_floor++;
+ 4a0:	8f 5f       	subi	r24, 0xFF	; 255
+ 4a2:	80 93 70 03 	sts	0x0370, r24	; 0x800370 <current_floor>
+					UART_send_string("Moving to floor: ");
+ 4a6:	82 e7       	ldi	r24, 0x72	; 114
+ 4a8:	92 e0       	ldi	r25, 0x02	; 2
+ 4aa:	4e df       	rcall	.-356    	; 0x348 <UART_send_string>
+					itoa(current_floor, str, 10);
+ 4ac:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+ 4b0:	4a e0       	ldi	r20, 0x0A	; 10
+ 4b2:	be 01       	movw	r22, r28
+ 4b4:	6f 5f       	subi	r22, 0xFF	; 255
+ 4b6:	7f 4f       	sbci	r23, 0xFF	; 255
+ 4b8:	90 e0       	ldi	r25, 0x00	; 0
+ 4ba:	8e d0       	rcall	.+284    	; 0x5d8 <__itoa_ncheck>
+ 4bc:	ce 01       	movw	r24, r28
+					UART_send_string(str);
+ 4be:	01 96       	adiw	r24, 0x01	; 1
+ 4c0:	43 df       	rcall	.-378    	; 0x348 <UART_send_string>
+ 4c2:	8e e8       	ldi	r24, 0x8E	; 142
+ 4c4:	92 e0       	ldi	r25, 0x02	; 2
+					UART_send_string("\r\n");
+ 4c6:	40 df       	rcall	.-384    	; 0x348 <UART_send_string>
+ 4c8:	2f ef       	ldi	r18, 0xFF	; 255
+ 4ca:	83 ec       	ldi	r24, 0xC3	; 195
+ 4cc:	99 e0       	ldi	r25, 0x09	; 9
+ 4ce:	21 50       	subi	r18, 0x01	; 1
+ 4d0:	80 40       	sbci	r24, 0x00	; 0
+ 4d2:	90 40       	sbci	r25, 0x00	; 0
+ 4d4:	e1 f7       	brne	.-8      	; 0x4ce <__LOCK_REGION_LENGTH__+0xce>
+ 4d6:	00 c0       	rjmp	.+0      	; 0x4d8 <__LOCK_REGION_LENGTH__+0xd8>
+ 4d8:	00 00       	nop
+ 4da:	0f 5f       	subi	r16, 0xFF	; 255
+ 4dc:	1f 4f       	sbci	r17, 0xFF	; 255
+				_delay_ms(20);  // Debounce
+    
+				UART_send_string("Going up!\r\n");
+				// send_command('M');
+				
+				for(int i = 0; i < floors_to_travel; i++){
+ 4de:	80 91 6e 03 	lds	r24, 0x036E	; 0x80036e <__data_end>
+ 4e2:	90 e0       	ldi	r25, 0x00	; 0
+ 4e4:	08 17       	cp	r16, r24
+ 4e6:	19 07       	cpc	r17, r25
+ 4e8:	cc f2       	brlt	.-78     	; 0x49c <__LOCK_REGION_LENGTH__+0x9c>
+ 4ea:	84 e8       	ldi	r24, 0x84	; 132
+ 4ec:	92 e0       	ldi	r25, 0x02	; 2
+					UART_send_string("\r\n");
+					_delay_ms(200);
+				}
+				
+				// send_command('S');
+				UART_send_string("Door open!\r\n");
+ 4ee:	2c df       	rcall	.-424    	; 0x348 <UART_send_string>
+ 4f0:	2f ef       	ldi	r18, 0xFF	; 255
+ 4f2:	83 ec       	ldi	r24, 0xC3	; 195
+ 4f4:	99 e0       	ldi	r25, 0x09	; 9
+ 4f6:	21 50       	subi	r18, 0x01	; 1
+ 4f8:	80 40       	sbci	r24, 0x00	; 0
+ 4fa:	90 40       	sbci	r25, 0x00	; 0
+ 4fc:	e1 f7       	brne	.-8      	; 0x4f6 <__LOCK_REGION_LENGTH__+0xf6>
+ 4fe:	00 c0       	rjmp	.+0      	; 0x500 <__LOCK_REGION_LENGTH__+0x100>
+ 500:	00 00       	nop
+ 502:	5b c0       	rjmp	.+182    	; 0x5ba <__LOCK_REGION_LENGTH__+0x1ba>
+ 504:	2f ef       	ldi	r18, 0xFF	; 255
+ 506:	89 ef       	ldi	r24, 0xF9	; 249
+ 508:	90 e0       	ldi	r25, 0x00	; 0
+ 50a:	21 50       	subi	r18, 0x01	; 1
+ 50c:	80 40       	sbci	r24, 0x00	; 0
+ 50e:	90 40       	sbci	r25, 0x00	; 0
+ 510:	e1 f7       	brne	.-8      	; 0x50a <__LOCK_REGION_LENGTH__+0x10a>
+ 512:	00 c0       	rjmp	.+0      	; 0x514 <__LOCK_REGION_LENGTH__+0x114>
+ 514:	00 00       	nop
+ 516:	81 e9       	ldi	r24, 0x91	; 145
+			
+			case 2:
+			
+				_delay_ms(20);  // Debounce
+			
+				UART_send_string("No action.\r\n");
+ 518:	92 e0       	ldi	r25, 0x02	; 2
+ 51a:	16 df       	rcall	.-468    	; 0x348 <UART_send_string>
+ 51c:	84 e8       	ldi	r24, 0x84	; 132
+ 51e:	92 e0       	ldi	r25, 0x02	; 2
+				// send_command('S');
+				
+				UART_send_string("Door open!\r\n");
+ 520:	13 df       	rcall	.-474    	; 0x348 <UART_send_string>
+ 522:	2f ef       	ldi	r18, 0xFF	; 255
+ 524:	83 ec       	ldi	r24, 0xC3	; 195
+ 526:	99 e0       	ldi	r25, 0x09	; 9
+ 528:	21 50       	subi	r18, 0x01	; 1
+ 52a:	80 40       	sbci	r24, 0x00	; 0
+ 52c:	90 40       	sbci	r25, 0x00	; 0
+ 52e:	e1 f7       	brne	.-8      	; 0x528 <__LOCK_REGION_LENGTH__+0x128>
+ 530:	00 c0       	rjmp	.+0      	; 0x532 <__LOCK_REGION_LENGTH__+0x132>
+ 532:	00 00       	nop
+ 534:	42 c0       	rjmp	.+132    	; 0x5ba <__LOCK_REGION_LENGTH__+0x1ba>
+ 536:	2f ef       	ldi	r18, 0xFF	; 255
+ 538:	89 ef       	ldi	r24, 0xF9	; 249
+ 53a:	90 e0       	ldi	r25, 0x00	; 0
+ 53c:	21 50       	subi	r18, 0x01	; 1
+ 53e:	80 40       	sbci	r24, 0x00	; 0
+ 540:	90 40       	sbci	r25, 0x00	; 0
+ 542:	e1 f7       	brne	.-8      	; 0x53c <__LOCK_REGION_LENGTH__+0x13c>
+ 544:	00 c0       	rjmp	.+0      	; 0x546 <__LOCK_REGION_LENGTH__+0x146>
+ 546:	00 00       	nop
+ 548:	8e e9       	ldi	r24, 0x9E	; 158
+				break;
+				
+			case 3:
+			
+	            _delay_ms(20);  // Debounce
+	            UART_send_string("Going down!\r\n");
+ 54a:	92 e0       	ldi	r25, 0x02	; 2
+ 54c:	fd de       	rcall	.-518    	; 0x348 <UART_send_string>
+ 54e:	00 e0       	ldi	r16, 0x00	; 0
+				// send_command('M');
+				for(int i = 0; i < floors_to_travel; i++){
+ 550:	10 e0       	ldi	r17, 0x00	; 0
+ 552:	21 c0       	rjmp	.+66     	; 0x596 <__LOCK_REGION_LENGTH__+0x196>
+					current_floor--;
+ 554:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+ 558:	81 50       	subi	r24, 0x01	; 1
+ 55a:	80 93 70 03 	sts	0x0370, r24	; 0x800370 <current_floor>
+					UART_send_string("Moving to floor: ");
+ 55e:	82 e7       	ldi	r24, 0x72	; 114
+ 560:	92 e0       	ldi	r25, 0x02	; 2
+ 562:	f2 de       	rcall	.-540    	; 0x348 <UART_send_string>
+ 564:	80 91 70 03 	lds	r24, 0x0370	; 0x800370 <current_floor>
+					itoa(current_floor, str, 10);
+ 568:	4a e0       	ldi	r20, 0x0A	; 10
+ 56a:	be 01       	movw	r22, r28
+ 56c:	6f 5f       	subi	r22, 0xFF	; 255
+ 56e:	7f 4f       	sbci	r23, 0xFF	; 255
+ 570:	90 e0       	ldi	r25, 0x00	; 0
+ 572:	32 d0       	rcall	.+100    	; 0x5d8 <__itoa_ncheck>
+ 574:	ce 01       	movw	r24, r28
+ 576:	01 96       	adiw	r24, 0x01	; 1
+					UART_send_string(str);
+ 578:	e7 de       	rcall	.-562    	; 0x348 <UART_send_string>
+ 57a:	8e e8       	ldi	r24, 0x8E	; 142
+ 57c:	92 e0       	ldi	r25, 0x02	; 2
+					UART_send_string("\r\n");
+ 57e:	e4 de       	rcall	.-568    	; 0x348 <UART_send_string>
+ 580:	2f ef       	ldi	r18, 0xFF	; 255
+ 582:	83 ec       	ldi	r24, 0xC3	; 195
+ 584:	99 e0       	ldi	r25, 0x09	; 9
+ 586:	21 50       	subi	r18, 0x01	; 1
+ 588:	80 40       	sbci	r24, 0x00	; 0
+ 58a:	90 40       	sbci	r25, 0x00	; 0
+ 58c:	e1 f7       	brne	.-8      	; 0x586 <__LOCK_REGION_LENGTH__+0x186>
+ 58e:	00 c0       	rjmp	.+0      	; 0x590 <__LOCK_REGION_LENGTH__+0x190>
+ 590:	00 00       	nop
+ 592:	0f 5f       	subi	r16, 0xFF	; 255
+ 594:	1f 4f       	sbci	r17, 0xFF	; 255
+ 596:	80 91 6e 03 	lds	r24, 0x036E	; 0x80036e <__data_end>
+			case 3:
+			
+	            _delay_ms(20);  // Debounce
+	            UART_send_string("Going down!\r\n");
+				// send_command('M');
+				for(int i = 0; i < floors_to_travel; i++){
+ 59a:	90 e0       	ldi	r25, 0x00	; 0
+ 59c:	08 17       	cp	r16, r24
+ 59e:	19 07       	cpc	r17, r25
+ 5a0:	cc f2       	brlt	.-78     	; 0x554 <__LOCK_REGION_LENGTH__+0x154>
+ 5a2:	84 e8       	ldi	r24, 0x84	; 132
+ 5a4:	92 e0       	ldi	r25, 0x02	; 2
+ 5a6:	d0 de       	rcall	.-608    	; 0x348 <UART_send_string>
+					UART_send_string("\r\n");
+					_delay_ms(200);						
+				}
+				
+				// send_command('S');
+				UART_send_string("Door open!\r\n");
+ 5a8:	2f ef       	ldi	r18, 0xFF	; 255
+ 5aa:	83 ec       	ldi	r24, 0xC3	; 195
+ 5ac:	99 e0       	ldi	r25, 0x09	; 9
+ 5ae:	21 50       	subi	r18, 0x01	; 1
+ 5b0:	80 40       	sbci	r24, 0x00	; 0
+ 5b2:	90 40       	sbci	r25, 0x00	; 0
+ 5b4:	e1 f7       	brne	.-8      	; 0x5ae <__LOCK_REGION_LENGTH__+0x1ae>
+ 5b6:	00 c0       	rjmp	.+0      	; 0x5b8 <__LOCK_REGION_LENGTH__+0x1b8>
+ 5b8:	00 00       	nop
+ 5ba:	8f e3       	ldi	r24, 0x3F	; 63
+ 5bc:	9c e9       	ldi	r25, 0x9C	; 156
+ 5be:	01 97       	sbiw	r24, 0x01	; 1
+ 5c0:	f1 f7       	brne	.-4      	; 0x5be <__LOCK_REGION_LENGTH__+0x1be>
+ 5c2:	00 c0       	rjmp	.+0      	; 0x5c4 <__LOCK_REGION_LENGTH__+0x1c4>
+ 5c4:	00 00       	nop
+ 5c6:	f9 ce       	rjmp	.-526    	; 0x3ba <main+0x16>
+
+000005c8 <__tablejump2__>:
+ 5c8:	ee 0f       	add	r30, r30
+ 5ca:	ff 1f       	adc	r31, r31
+ 5cc:	88 1f       	adc	r24, r24
+ 5ce:	8b bf       	out	0x3b, r24	; 59
+ 5d0:	07 90       	elpm	r0, Z+
+ 5d2:	f6 91       	elpm	r31, Z
+ 5d4:	e0 2d       	mov	r30, r0
+ 5d6:	19 94       	eijmp
+
+000005d8 <__itoa_ncheck>:
+ 5d8:	bb 27       	eor	r27, r27
+ 5da:	4a 30       	cpi	r20, 0x0A	; 10
+ 5dc:	31 f4       	brne	.+12     	; 0x5ea <__itoa_ncheck+0x12>
+ 5de:	99 23       	and	r25, r25
+ 5e0:	22 f4       	brpl	.+8      	; 0x5ea <__itoa_ncheck+0x12>
+ 5e2:	bd e2       	ldi	r27, 0x2D	; 45
+ 5e4:	90 95       	com	r25
+ 5e6:	81 95       	neg	r24
+ 5e8:	9f 4f       	sbci	r25, 0xFF	; 255
+ 5ea:	01 c0       	rjmp	.+2      	; 0x5ee <__utoa_common>
+
+000005ec <__utoa_ncheck>:
+ 5ec:	bb 27       	eor	r27, r27
+
+000005ee <__utoa_common>:
+ 5ee:	fb 01       	movw	r30, r22
+ 5f0:	55 27       	eor	r21, r21
+ 5f2:	aa 27       	eor	r26, r26
+ 5f4:	88 0f       	add	r24, r24
+ 5f6:	99 1f       	adc	r25, r25
+ 5f8:	aa 1f       	adc	r26, r26
+ 5fa:	a4 17       	cp	r26, r20
+ 5fc:	10 f0       	brcs	.+4      	; 0x602 <__utoa_common+0x14>
+ 5fe:	a4 1b       	sub	r26, r20
+ 600:	83 95       	inc	r24
+ 602:	50 51       	subi	r21, 0x10	; 16
+ 604:	b9 f7       	brne	.-18     	; 0x5f4 <__utoa_common+0x6>
+ 606:	a0 5d       	subi	r26, 0xD0	; 208
+ 608:	aa 33       	cpi	r26, 0x3A	; 58
+ 60a:	08 f0       	brcs	.+2      	; 0x60e <__utoa_common+0x20>
+ 60c:	a9 5d       	subi	r26, 0xD9	; 217
+ 60e:	a1 93       	st	Z+, r26
+ 610:	00 97       	sbiw	r24, 0x00	; 0
+ 612:	79 f7       	brne	.-34     	; 0x5f2 <__utoa_common+0x4>
+ 614:	b1 11       	cpse	r27, r1
+ 616:	b1 93       	st	Z+, r27
+ 618:	11 92       	st	Z+, r1
+ 61a:	cb 01       	movw	r24, r22
+ 61c:	00 c0       	rjmp	.+0      	; 0x61e <strrev>
+
+0000061e <strrev>:
+ 61e:	dc 01       	movw	r26, r24
+ 620:	fc 01       	movw	r30, r24
+ 622:	67 2f       	mov	r22, r23
+ 624:	71 91       	ld	r23, Z+
+ 626:	77 23       	and	r23, r23
+ 628:	e1 f7       	brne	.-8      	; 0x622 <strrev+0x4>
+ 62a:	32 97       	sbiw	r30, 0x02	; 2
+ 62c:	04 c0       	rjmp	.+8      	; 0x636 <strrev+0x18>
+ 62e:	7c 91       	ld	r23, X
+ 630:	6d 93       	st	X+, r22
+ 632:	70 83       	st	Z, r23
+ 634:	62 91       	ld	r22, -Z
+ 636:	ae 17       	cp	r26, r30
+ 638:	bf 07       	cpc	r27, r31
+ 63a:	c8 f3       	brcs	.-14     	; 0x62e <strrev+0x10>
+ 63c:	08 95       	ret
+
+0000063e <_exit>:
+ 63e:	f8 94       	cli
+
+00000640 <__stop_program>:
+ 640:	ff cf       	rjmp	.-2      	; 0x640 <__stop_program>
