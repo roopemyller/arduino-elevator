@@ -16,6 +16,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "keypad.h"
+#include "lcd.h" // lcd header file made by Peter Fleury
 #include <stdio.h>
 #include <stdlib.h>
 //#include <util/setbaud.h>
@@ -94,6 +95,14 @@ int main(void) {
 				
 				for(int i = 0; i < floors_to_travel; i++){
 					current_floor++;
+					// Update LCD to display current floor
+					lcd_clrscr();
+					//lcd_puts("Floor: %d", current_floor);
+					char lcd_str[20];
+					sprintf(lcd_str, "Floor: %d", current_floor);
+					lcd_puts(lcd_str);
+					
+					
 					UART_send_string("Moving to floor: ");
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
@@ -128,6 +137,13 @@ int main(void) {
 				send_command('M');
 				for(int i = 0; i < floors_to_travel; i++){
 					current_floor--;
+					// Update LCD to display current floor
+					lcd_clrscr();
+					//lcd_puts("Floor: %d", current_floor);
+					char lcd_str[20];
+					sprintf(lcd_str, "Floor: %d", current_floor);
+					lcd_puts(lcd_str);
+					
 					UART_send_string("Moving to floor: ");
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
@@ -153,13 +169,26 @@ int main(void) {
 void door_open_close(){
 	UART_send_string("Door open!\r\n");
 	send_command('O');
+	// Update LCD to show door opening message for 5 seconds
+	lcd_clrscr();
+	lcd_puts("Door is open");
 	_delay_ms(5000);
 	UART_send_string("Door close!\r\n");
 	send_command('C');
+	// Update LCD to door closed for 1 second and return to idle
+	lcd_clrscr();
+	lcd_puts("Door is closed");
+	_delay_ms(1000);
+	lcd_clrscr();
+	lcd_puts("Choose the floor");
 }
 
 void setup(){
-	// Init LCD
+	// Initialize LCD
+	lcd_init(LCD_DISP_ON);
+	lcd_clrscr();
+	lcd_puts("Choose the floor");
+	_delay_ms(20);
 	// Initialize UART for debugging
 	UART_init();
 	_delay_ms(20);
