@@ -3,29 +3,29 @@ slave.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  0000016a  2**0
+  0 .data         00000000  00800100  00800100  000001fa  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000116  00000000  00000000  00000054  2**1
+  1 .text         000001a6  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  0000016a  2**0
+  2 .comment      00000030  00000000  00000000  000001fa  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000019c  2**2
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000022c  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000030  00000000  00000000  000001dc  2**0
+  4 .debug_aranges 00000038  00000000  00000000  0000026c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000006e5  00000000  00000000  0000020c  2**0
+  5 .debug_info   00000808  00000000  00000000  000002a4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 0000064b  00000000  00000000  000008f1  2**0
+  6 .debug_abbrev 00000708  00000000  00000000  00000aac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000028c  00000000  00000000  00000f3c  2**0
+  7 .debug_line   00000364  00000000  00000000  000011b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000054  00000000  00000000  000011c8  2**2
+  8 .debug_frame  0000009c  00000000  00000000  00001518  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000376  00000000  00000000  0000121c  2**0
+  9 .debug_str    000003d5  00000000  00000000  000015b4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000099  00000000  00000000  00001592  2**0
+ 10 .debug_loc    000001e7  00000000  00000000  00001989  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000020  00000000  00000000  0000162b  2**0
+ 11 .debug_ranges 00000028  00000000  00000000  00001b70  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -55,7 +55,7 @@ Disassembly of section .text:
   54:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   58:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
   5c:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
-  60:	0c 94 48 00 	jmp	0x90	; 0x90 <__vector_24>
+  60:	0c 94 72 00 	jmp	0xe4	; 0xe4 <__vector_24>
   64:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__bad_interrupt>
 
 00000068 <__ctors_end>:
@@ -65,15 +65,15 @@ Disassembly of section .text:
   6e:	d8 e0       	ldi	r29, 0x08	; 8
   70:	de bf       	out	0x3e, r29	; 62
   72:	cd bf       	out	0x3d, r28	; 61
-  74:	0e 94 83 00 	call	0x106	; 0x106 <main>
-  78:	0c 94 89 00 	jmp	0x112	; 0x112 <_exit>
+  74:	0e 94 cb 00 	call	0x196	; 0x196 <main>
+  78:	0c 94 d1 00 	jmp	0x1a2	; 0x1a2 <_exit>
 
 0000007c <__bad_interrupt>:
   7c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000080 <TWI_init>:
-volatile uint8_t door_active = 0;
-*/
+#include <stdio.h>
+#include <avr/interrupt.h>
 
 void TWI_init(){
 	// Init the TWI Slave
@@ -87,120 +87,218 @@ void TWI_init(){
   8c:	78 94       	sei
   8e:	08 95       	ret
 
-00000090 <__vector_24>:
+00000090 <blink>:
 }
 
+void blink(uint8_t led_pin, int times){
+	for (int i = 0; i < times; i++){
+  90:	40 e0       	ldi	r20, 0x00	; 0
+  92:	50 e0       	ldi	r21, 0x00	; 0
+  94:	23 c0       	rjmp	.+70     	; 0xdc <blink+0x4c>
+		PORTB |= (1 << led_pin); // Turn ON LED
+  96:	95 b1       	in	r25, 0x05	; 5
+  98:	21 e0       	ldi	r18, 0x01	; 1
+  9a:	30 e0       	ldi	r19, 0x00	; 0
+  9c:	08 2e       	mov	r0, r24
+  9e:	02 c0       	rjmp	.+4      	; 0xa4 <blink+0x14>
+  a0:	22 0f       	add	r18, r18
+  a2:	33 1f       	adc	r19, r19
+  a4:	0a 94       	dec	r0
+  a6:	e2 f7       	brpl	.-8      	; 0xa0 <blink+0x10>
+  a8:	92 2b       	or	r25, r18
+  aa:	95 b9       	out	0x05, r25	; 5
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  ac:	9f ef       	ldi	r25, 0xFF	; 255
+  ae:	e3 ec       	ldi	r30, 0xC3	; 195
+  b0:	f9 e0       	ldi	r31, 0x09	; 9
+  b2:	91 50       	subi	r25, 0x01	; 1
+  b4:	e0 40       	sbci	r30, 0x00	; 0
+  b6:	f0 40       	sbci	r31, 0x00	; 0
+  b8:	e1 f7       	brne	.-8      	; 0xb2 <blink+0x22>
+  ba:	00 c0       	rjmp	.+0      	; 0xbc <blink+0x2c>
+  bc:	00 00       	nop
+		_delay_ms(200);
+		PORTB &= ~(1 << led_pin); // Turn OFF LED
+  be:	95 b1       	in	r25, 0x05	; 5
+  c0:	20 95       	com	r18
+  c2:	29 23       	and	r18, r25
+  c4:	25 b9       	out	0x05, r18	; 5
+  c6:	2f ef       	ldi	r18, 0xFF	; 255
+  c8:	33 ec       	ldi	r19, 0xC3	; 195
+  ca:	99 e0       	ldi	r25, 0x09	; 9
+  cc:	21 50       	subi	r18, 0x01	; 1
+  ce:	30 40       	sbci	r19, 0x00	; 0
+  d0:	90 40       	sbci	r25, 0x00	; 0
+  d2:	e1 f7       	brne	.-8      	; 0xcc <blink+0x3c>
+  d4:	00 c0       	rjmp	.+0      	; 0xd6 <blink+0x46>
+  d6:	00 00       	nop
+	TWAR = (SLAVE_ADDRESS << 1); // Set slave address
+	sei();
+}
+
+void blink(uint8_t led_pin, int times){
+	for (int i = 0; i < times; i++){
+  d8:	4f 5f       	subi	r20, 0xFF	; 255
+  da:	5f 4f       	sbci	r21, 0xFF	; 255
+  dc:	46 17       	cp	r20, r22
+  de:	57 07       	cpc	r21, r23
+  e0:	d4 f2       	brlt	.-76     	; 0x96 <blink+0x6>
+		PORTB |= (1 << led_pin); // Turn ON LED
+		_delay_ms(200);
+		PORTB &= ~(1 << led_pin); // Turn OFF LED
+		_delay_ms(200);		
+	}
+}
+  e2:	08 95       	ret
+
+000000e4 <__vector_24>:
+
+
 ISR(TWI_vect){
-  90:	1f 92       	push	r1
-  92:	0f 92       	push	r0
-  94:	0f b6       	in	r0, 0x3f	; 63
-  96:	0f 92       	push	r0
-  98:	11 24       	eor	r1, r1
-  9a:	8f 93       	push	r24
+  e4:	1f 92       	push	r1
+  e6:	0f 92       	push	r0
+  e8:	0f b6       	in	r0, 0x3f	; 63
+  ea:	0f 92       	push	r0
+  ec:	11 24       	eor	r1, r1
+  ee:	2f 93       	push	r18
+  f0:	3f 93       	push	r19
+  f2:	4f 93       	push	r20
+  f4:	5f 93       	push	r21
+  f6:	6f 93       	push	r22
+  f8:	7f 93       	push	r23
+  fa:	8f 93       	push	r24
+  fc:	9f 93       	push	r25
+  fe:	af 93       	push	r26
+ 100:	bf 93       	push	r27
+ 102:	ef 93       	push	r30
+ 104:	ff 93       	push	r31
 	// Get status code
 	uint8_t twi_status = (TWSR & 0xF8);
-  9c:	80 91 b9 00 	lds	r24, 0x00B9	; 0x8000b9 <__TEXT_REGION_LENGTH__+0x7f80b9>
-  a0:	88 7f       	andi	r24, 0xF8	; 248
+ 106:	80 91 b9 00 	lds	r24, 0x00B9	; 0x8000b9 <__TEXT_REGION_LENGTH__+0x7f80b9>
+ 10a:	88 7f       	andi	r24, 0xF8	; 248
 	
 	if(twi_status == 0x60 || twi_status == 0x68) {
-  a2:	80 36       	cpi	r24, 0x60	; 96
-  a4:	11 f0       	breq	.+4      	; 0xaa <__vector_24+0x1a>
-  a6:	88 36       	cpi	r24, 0x68	; 104
-  a8:	21 f4       	brne	.+8      	; 0xb2 <__vector_24+0x22>
+ 10c:	80 36       	cpi	r24, 0x60	; 96
+ 10e:	11 f0       	breq	.+4      	; 0x114 <__vector_24+0x30>
+ 110:	88 36       	cpi	r24, 0x68	; 104
+ 112:	21 f4       	brne	.+8      	; 0x11c <__vector_24+0x38>
 		// SLA+W received, ACK returned
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
-  aa:	85 ec       	ldi	r24, 0xC5	; 197
-  ac:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
-  b0:	24 c0       	rjmp	.+72     	; 0xfa <__vector_24+0x6a>
+ 114:	85 ec       	ldi	r24, 0xC5	; 197
+ 116:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+ 11a:	2c c0       	rjmp	.+88     	; 0x174 <__vector_24+0x90>
 	}
 	else if((twi_status == 0x80) || (twi_status == 0x90)) {
-  b2:	80 38       	cpi	r24, 0x80	; 128
-  b4:	11 f0       	breq	.+4      	; 0xba <__vector_24+0x2a>
-  b6:	80 39       	cpi	r24, 0x90	; 144
-  b8:	e9 f4       	brne	.+58     	; 0xf4 <__vector_24+0x64>
+ 11c:	80 38       	cpi	r24, 0x80	; 128
+ 11e:	11 f0       	breq	.+4      	; 0x124 <__vector_24+0x40>
+ 120:	80 39       	cpi	r24, 0x90	; 144
+ 122:	29 f5       	brne	.+74     	; 0x16e <__vector_24+0x8a>
 		// Data received, ACK returned
 		char command = TWDR;
-  ba:	80 91 bb 00 	lds	r24, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7f80bb>
+ 124:	80 91 bb 00 	lds	r24, 0x00BB	; 0x8000bb <__TEXT_REGION_LENGTH__+0x7f80bb>
 		
 		if(command == 'M'){
-  be:	8d 34       	cpi	r24, 0x4D	; 77
-  c0:	21 f4       	brne	.+8      	; 0xca <__vector_24+0x3a>
+ 128:	8d 34       	cpi	r24, 0x4D	; 77
+ 12a:	21 f4       	brne	.+8      	; 0x134 <__vector_24+0x50>
 			PORTB |= (1 << MOVEMENT_LED); // Turn ON movement LED
-  c2:	85 b1       	in	r24, 0x05	; 5
-  c4:	82 60       	ori	r24, 0x02	; 2
-  c6:	85 b9       	out	0x05, r24	; 5
-  c8:	11 c0       	rjmp	.+34     	; 0xec <__vector_24+0x5c>
+ 12c:	85 b1       	in	r24, 0x05	; 5
+ 12e:	82 60       	ori	r24, 0x02	; 2
+ 130:	85 b9       	out	0x05, r24	; 5
+ 132:	19 c0       	rjmp	.+50     	; 0x166 <__vector_24+0x82>
 		} else if(command == 'S'){
-  ca:	83 35       	cpi	r24, 0x53	; 83
-  cc:	21 f4       	brne	.+8      	; 0xd6 <__vector_24+0x46>
+ 134:	83 35       	cpi	r24, 0x53	; 83
+ 136:	21 f4       	brne	.+8      	; 0x140 <__vector_24+0x5c>
 			PORTB &= ~(1 << MOVEMENT_LED); // Turn OFF movement LED
-  ce:	85 b1       	in	r24, 0x05	; 5
-  d0:	8d 7f       	andi	r24, 0xFD	; 253
-  d2:	85 b9       	out	0x05, r24	; 5
-  d4:	0b c0       	rjmp	.+22     	; 0xec <__vector_24+0x5c>
+ 138:	85 b1       	in	r24, 0x05	; 5
+ 13a:	8d 7f       	andi	r24, 0xFD	; 253
+ 13c:	85 b9       	out	0x05, r24	; 5
+ 13e:	13 c0       	rjmp	.+38     	; 0x166 <__vector_24+0x82>
 		} else if (command == 'O') {
-  d6:	8f 34       	cpi	r24, 0x4F	; 79
-  d8:	21 f4       	brne	.+8      	; 0xe2 <__vector_24+0x52>
+ 140:	8f 34       	cpi	r24, 0x4F	; 79
+ 142:	21 f4       	brne	.+8      	; 0x14c <__vector_24+0x68>
 			PORTB |= (1 << DOOR_LED);  // Turn ON door LED
-  da:	85 b1       	in	r24, 0x05	; 5
-  dc:	84 60       	ori	r24, 0x04	; 4
-  de:	85 b9       	out	0x05, r24	; 5
-  e0:	05 c0       	rjmp	.+10     	; 0xec <__vector_24+0x5c>
-			// door_active = 1;
-			// door_timer = 0;  // Reset timer
+ 144:	85 b1       	in	r24, 0x05	; 5
+ 146:	84 60       	ori	r24, 0x04	; 4
+ 148:	85 b9       	out	0x05, r24	; 5
+ 14a:	0d c0       	rjmp	.+26     	; 0x166 <__vector_24+0x82>
 		} else if (command == 'C'){
-  e2:	83 34       	cpi	r24, 0x43	; 67
-  e4:	19 f4       	brne	.+6      	; 0xec <__vector_24+0x5c>
+ 14c:	83 34       	cpi	r24, 0x43	; 67
+ 14e:	21 f4       	brne	.+8      	; 0x158 <__vector_24+0x74>
 			PORTB &= ~(1 << DOOR_LED); // Turn OFF door LED
-  e6:	85 b1       	in	r24, 0x05	; 5
-  e8:	8b 7f       	andi	r24, 0xFB	; 251
-  ea:	85 b9       	out	0x05, r24	; 5
+ 150:	85 b1       	in	r24, 0x05	; 5
+ 152:	8b 7f       	andi	r24, 0xFB	; 251
+ 154:	85 b9       	out	0x05, r24	; 5
+ 156:	07 c0       	rjmp	.+14     	; 0x166 <__vector_24+0x82>
+		} else if (command == 'F'){ // Fault state, blink movement LED 3 times
+ 158:	86 34       	cpi	r24, 0x46	; 70
+ 15a:	29 f4       	brne	.+10     	; 0x166 <__vector_24+0x82>
+			blink(MOVEMENT_LED, 3);
+ 15c:	63 e0       	ldi	r22, 0x03	; 3
+ 15e:	70 e0       	ldi	r23, 0x00	; 0
+ 160:	81 e0       	ldi	r24, 0x01	; 1
+ 162:	0e 94 48 00 	call	0x90	; 0x90 <blink>
 		}
 		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
-  ec:	85 ec       	ldi	r24, 0xC5	; 197
-  ee:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+ 166:	85 ec       	ldi	r24, 0xC5	; 197
+ 168:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
 	
 	if(twi_status == 0x60 || twi_status == 0x68) {
 		// SLA+W received, ACK returned
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
 	else if((twi_status == 0x80) || (twi_status == 0x90)) {
-  f2:	03 c0       	rjmp	.+6      	; 0xfa <__vector_24+0x6a>
+ 16c:	03 c0       	rjmp	.+6      	; 0x174 <__vector_24+0x90>
 		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
 	else {
 		// Default - send ACK and continue
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
-  f4:	85 ec       	ldi	r24, 0xC5	; 197
-  f6:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
+ 16e:	85 ec       	ldi	r24, 0xC5	; 197
+ 170:	80 93 bc 00 	sts	0x00BC, r24	; 0x8000bc <__TEXT_REGION_LENGTH__+0x7f80bc>
 	}
 }
-  fa:	8f 91       	pop	r24
-  fc:	0f 90       	pop	r0
-  fe:	0f be       	out	0x3f, r0	; 63
- 100:	0f 90       	pop	r0
- 102:	1f 90       	pop	r1
- 104:	18 95       	reti
+ 174:	ff 91       	pop	r31
+ 176:	ef 91       	pop	r30
+ 178:	bf 91       	pop	r27
+ 17a:	af 91       	pop	r26
+ 17c:	9f 91       	pop	r25
+ 17e:	8f 91       	pop	r24
+ 180:	7f 91       	pop	r23
+ 182:	6f 91       	pop	r22
+ 184:	5f 91       	pop	r21
+ 186:	4f 91       	pop	r20
+ 188:	3f 91       	pop	r19
+ 18a:	2f 91       	pop	r18
+ 18c:	0f 90       	pop	r0
+ 18e:	0f be       	out	0x3f, r0	; 63
+ 190:	0f 90       	pop	r0
+ 192:	1f 90       	pop	r1
+ 194:	18 95       	reti
 
-00000106 <main>:
+00000196 <main>:
 
 int main(void){
 	
 	// Set LED pins as outputs
 	DDRB |= (1 << MOVEMENT_LED) | (1 << DOOR_LED);
- 106:	84 b1       	in	r24, 0x04	; 4
- 108:	86 60       	ori	r24, 0x06	; 6
- 10a:	84 b9       	out	0x04, r24	; 4
+ 196:	84 b1       	in	r24, 0x04	; 4
+ 198:	86 60       	ori	r24, 0x06	; 6
+ 19a:	84 b9       	out	0x04, r24	; 4
 	
 	// Init TWI, will use ISR
 	TWI_init();
- 10c:	0e 94 40 00 	call	0x80	; 0x80 <TWI_init>
- 110:	ff cf       	rjmp	.-2      	; 0x110 <main+0xa>
+ 19c:	0e 94 40 00 	call	0x80	; 0x80 <TWI_init>
+ 1a0:	ff cf       	rjmp	.-2      	; 0x1a0 <main+0xa>
 
-00000112 <_exit>:
- 112:	f8 94       	cli
+000001a2 <_exit>:
+ 1a2:	f8 94       	cli
 
-00000114 <__stop_program>:
- 114:	ff cf       	rjmp	.-2      	; 0x114 <__stop_program>
+000001a4 <__stop_program>:
+ 1a4:	ff cf       	rjmp	.-2      	; 0x1a4 <__stop_program>
