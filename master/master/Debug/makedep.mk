@@ -6,5 +6,7 @@ delay.c
 
 keypad.c
 
+lcd.c
+
 main.c
 
