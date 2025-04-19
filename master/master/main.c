@@ -40,6 +40,9 @@ void UART_send_char(unsigned char data);
 void UART_send_string(char* str);
 void send_command(char cmd);
 void door_open_close();
+void LCD_top(const char* msg); // Top row of LCD display
+void LCD_bottom(int floor); // Bottom row of LCD display
+void clear_LCD_line(uint8_t row);
 
 char key_str[4];
 char* ptr;
@@ -92,21 +95,15 @@ int main(void) {
     
 				UART_send_string("Going up!\r\n");
 				send_command('M');
+				LCD_top("Going up");
 				
 				for(int i = 0; i < floors_to_travel; i++){
-					current_floor++;
-					// Update LCD to display current floor
-					lcd_clrscr();
-					//lcd_puts("Floor: %d", current_floor);
-					char lcd_str[20];
-					sprintf(lcd_str, "Floor: %d", current_floor);
-					lcd_puts(lcd_str);
-					
-					
+					current_floor++;					
 					UART_send_string("Moving to floor: ");
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
 					UART_send_string("\r\n");
+					LCD_bottom(current_floor); // Update LCD as elevator moves
 					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
 				}
 				send_command('S');
@@ -122,12 +119,10 @@ int main(void) {
 				_delay_ms(20);  // Debounce
 			
 				UART_send_string("Fault state.\r\n");
-				lcd_clrscr();
-				lcd_puts("Same Floor");
+				LCD_top("Same Floor");
 				send_command('F'); // Fault state, blink movement led 3 times
 				_delay_ms(1200);
-				lcd_clrscr();
-				lcd_puts("Choose the floor");
+				LCD_top("Choose the floor");
 				
 				_delay_ms(200);  // Prevent multiple triggers			
 				break;
@@ -137,19 +132,14 @@ int main(void) {
 	            _delay_ms(20);  // Debounce
 	            UART_send_string("Going down!\r\n");
 				send_command('M');
+				LCD_top("Going down");
 				for(int i = 0; i < floors_to_travel; i++){
 					current_floor--;
-					// Update LCD to display current floor
-					lcd_clrscr();
-					//lcd_puts("Floor: %d", current_floor);
-					char lcd_str[20];
-					sprintf(lcd_str, "Floor: %d", current_floor);
-					lcd_puts(lcd_str);
-					
 					UART_send_string("Moving to floor: ");
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
 					UART_send_string("\r\n");
+					LCD_bottom(current_floor); // Update LCD as elevator moves
 					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
 				}
 				
@@ -171,25 +161,21 @@ int main(void) {
 void door_open_close(){
 	UART_send_string("Door open!\r\n");
 	send_command('O');
-	// Update LCD to show door opening message for 5 seconds
-	lcd_clrscr();
-	lcd_puts("Door is open");
+	LCD_top("Door is open");
 	_delay_ms(5000);
+	
 	UART_send_string("Door close!\r\n");
 	send_command('C');
-	// Update LCD to door closed for 1 second and return to idle
-	lcd_clrscr();
-	lcd_puts("Door is closed");
+	LCD_top("Door is closed");
 	_delay_ms(1000);
-	lcd_clrscr();
-	lcd_puts("Choose the floor");
+	LCD_top("Choose the floor");
 }
 
 void setup(){
 	// Initialize LCD
 	lcd_init(LCD_DISP_ON);
 	lcd_clrscr();
-	lcd_puts("Choose the floor");
+	LCD_top("Choose the floor");
 	_delay_ms(20);
 	// Initialize UART for debugging
 	UART_init();
@@ -352,4 +338,28 @@ void UART_send_string(char* str) {
 	while (*str) {
 		UART_send_char(*str++);
 	}
+}
+
+// LCD display top row updates when elevator gives new information to user
+void LCD_top(const char* msg) {
+	lcd_gotoxy(0,0);
+	clear_LCD_line(0);
+	lcd_puts(msg);
+}
+
+// LCD display bottom row updates when elevator floor changes
+void LCD_bottom(int floor){
+	char str[20];
+	sprintf(str, "Current floor: %d", floor);
+	lcd_gotoxy(0,1);
+	clear_LCD_line(1);
+	lcd_puts(str);
+}
+
+// Clear one line (row) from LCD
+void clear_LCD_line(uint8_t row){
+	lcd_gotoxy(0, row);
+	for(uint8_t i=0; i < 16; i++)
+		lcd_putc(' ');
+	lcd_gotoxy(0,row);
 }
