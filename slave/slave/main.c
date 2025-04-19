@@ -25,6 +25,16 @@ void TWI_init(){
 	sei();
 }
 
+void blink(uint8_t led_pin, int times){
+	for (int i = 0; i < times; i++){
+		PORTB |= (1 << led_pin); // Turn ON LED
+		_delay_ms(200);
+		PORTB &= ~(1 << led_pin); // Turn OFF LED
+		_delay_ms(200);		
+	}
+}
+
+
 ISR(TWI_vect){
 	// Get status code
 	uint8_t twi_status = (TWSR & 0xF8);
@@ -45,6 +55,8 @@ ISR(TWI_vect){
 			PORTB |= (1 << DOOR_LED);  // Turn ON door LED
 		} else if (command == 'C'){
 			PORTB &= ~(1 << DOOR_LED); // Turn OFF door LED
+		} else if (command == 'F'){ // Fault state, blink movement LED 3 times
+			blink(MOVEMENT_LED, 3);
 		}
 		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);

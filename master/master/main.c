@@ -107,7 +107,7 @@ int main(void) {
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
 					UART_send_string("\r\n");
-					_delay_ms(200);
+					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
 				}
 				send_command('S');
 				
@@ -117,15 +117,17 @@ int main(void) {
 				_delay_ms(200);  // Prevent multiple triggers				
 				break;
 			
-			case 2: // SAME FLOOR
+			case 2: // SAME FLOOR -> Fault state
 			
 				_delay_ms(20);  // Debounce
 			
-				UART_send_string("No action.\r\n");
-				send_command('S');
-				
-				// Door open-close sequence
-				door_open_close();
+				UART_send_string("Fault state.\r\n");
+				lcd_clrscr();
+				lcd_puts("Same Floor");
+				send_command('F'); // Fault state, blink movement led 3 times
+				_delay_ms(1200);
+				lcd_clrscr();
+				lcd_puts("Choose the floor");
 				
 				_delay_ms(200);  // Prevent multiple triggers			
 				break;
@@ -148,7 +150,7 @@ int main(void) {
 					itoa(current_floor, str, 10);
 					UART_send_string(str);
 					UART_send_string("\r\n");
-					_delay_ms(200);						
+					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
 				}
 				
 				send_command('S');
