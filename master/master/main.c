@@ -31,6 +31,7 @@ volatile uint8_t floors_to_travel = 0;
 
 // Function prototypes
 void setup(void);
+uint8_t get_key_pressed();
 void TWI_init(void);
 uint8_t TWI_start(void);
 uint8_t TWI_write(uint8_t data);
@@ -44,37 +45,32 @@ void LCD_top(const char* msg); // Top row of LCD display
 void LCD_bottom(int floor); // Bottom row of LCD display
 void clear_LCD_line(uint8_t row);
 
+
 char key_str[4];
 char* ptr;
 
+uint8_t key_input = 0;
 
 int main(void) {
 	
 	setup();
-	
-	char str[20];  // Varataan 16 muistipaikkaa stringille
-	// char *str_ptr;        // Luodaan apumuuttuja pointerille stringiin.
-	// str_ptr = str;
-	
-    while (1) {
-  	
-		uint8_t key_input = KEYPAD_GetKey();
-		
-		// Tallennetaan	kaapattu keypad painallus int ja str pointer muodossa	
-		if(key_input != 0){ // Jos painiketta on painettu (ei ole 0)
 
-			key_input = key_input - '0';
-			itoa(key_input, str, 20);
-			UART_send_string("Pressed key: ");
-			UART_send_string(str);
-			UART_send_string ("\r\n");
-			
-		} else continue;
+	
+	char str[30];  // Varataan 30 muistipaikkaa stringille
+	
+	while (1) {
+
+		key_input = get_key_pressed();
+		
+		itoa(key_input, str, 30);
+		UART_send_string("Pressed key: ");
+		UART_send_string(str);
+		UART_send_string ("\r\n");
 		
 		// Define next state
-		if(current_floor < key_input)	{ current_state = 1; }
-		if(current_floor == key_input)	{ current_state = 2; }
-		if(current_floor > key_input)	{ current_state = 3; }
+		if(current_floor < key_input) { current_state = 1; }
+		if(current_floor == key_input) { current_state = 2; }
+		if(current_floor > key_input) { current_state = 3; }
 		
 		floors_to_travel = abs(current_floor - key_input);
 		
@@ -104,7 +100,7 @@ int main(void) {
 					UART_send_string(str);
 					UART_send_string("\r\n");
 					LCD_bottom(current_floor); // Update LCD as elevator moves
-					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
+					_delay_ms(100); // ELEVATOR MOVEMENT SPEED
 				}
 				send_command('S');
 				
@@ -140,7 +136,7 @@ int main(void) {
 					UART_send_string(str);
 					UART_send_string("\r\n");
 					LCD_bottom(current_floor); // Update LCD as elevator moves
-					_delay_ms(500); // ELEVATOR MOVEMENT SPEED
+					_delay_ms(100); // ELEVATOR MOVEMENT SPEED
 				}
 				
 				send_command('S');
@@ -176,6 +172,7 @@ void setup(){
 	lcd_init(LCD_DISP_ON);
 	lcd_clrscr();
 	LCD_top("Choose the floor");
+	LCD_bottom(0);
 	_delay_ms(20);
 	// Initialize UART for debugging
 	UART_init();
@@ -190,31 +187,114 @@ void setup(){
 	_delay_ms(20);
 }
 
-char* get_key_pressed(){
-	// Read raw signal from keypad
-	uint8_t key_signal = KEYPAD_GetKey();
+// LCD display top row updates when elevator gives new information to user
+void LCD_top(const char* msg) {
+	lcd_gotoxy(0,0);
+	clear_LCD_line(0);
+	lcd_puts(msg);
+}
 
-	_delay_ms(300);
+// LCD display bottom row updates when elevator floor changes
+void LCD_bottom(int floor){
+	char str[20];
+	sprintf(str, "Floor now: %d", floor);
+	lcd_gotoxy(0,1);
+	clear_LCD_line(1);
+	lcd_puts(str);
+}
 
-	// Check for valid key press
-	if (key_signal != 0xFF) { // Assuming 0xFF means no key pressed
-		char key_str[4];
+// Clear one line (row) from LCD
+void clear_LCD_line(uint8_t row){
+	lcd_gotoxy(0, row);
+	for(uint8_t i=0; i < 16; i++)
+	lcd_putc(' ');
+	lcd_gotoxy(0,row);
+}
 
-		// Check if it's a numeric key (1 to 9) or special key (A, B, C, D, *, #)
-		if (key_signal >= '1' && key_signal <= '9') {
+uint8_t get_key_pressed(){
+
+
+	uint8_t keypad_ready = 0;
+	uint8_t key_index = 0;
+	uint8_t floor_value = 0;
+	
+	char key[16];
+	
+	UART_send_string("Select floor between 0 - 99.");
+	UART_send_string ("\r\n");
+	UART_send_string("'*' confirms floor.");
+	UART_send_string ("\r\n");
+	
+	while(keypad_ready == 0){
+		
+		// Read raw signal from keypad
+		uint8_t key_signal = KEYPAD_GetKey();
+		
+		// Debounce:
+		_delay_ms(100);
+		
+		// Check for valid key press
+		//if (key_signal != 0xFF) { // Assuming 0xFF means no key pressed
+
+		// For numeric keys (0 to 9)
+		if (key_signal >= '0' && key_signal <= '9') {
 			// Convert key to numeric value
 			uint8_t key_value = key_signal - '0'; // Convert ASCII value to numeric value
-			itoa(key_value, key_str, 10); // Convert numeric value to string
 
-			} else {
-				// For special keys, just display the character
-				key_str[0] = key_signal;
-				key_str[1] = '\0'; // Null terminate the string
+			itoa(key_value, key, 10);
+			UART_send_string("Pressed key: ");
+			UART_send_string(key);
+			UART_send_string(" -- ");
+			UART_send_string("Key index: ");
+			itoa(key_index, key, 10);
+			UART_send_string(key);
+			UART_send_string ("\r\n");
+
+			// If two values are already given, reset the current input and start over
+			if(key_index == 2){
+				floor_value = 0;
+				key_index = 0;
+			}
+			
+			// Add the First value "X + Y"
+			if(key_index == 0){
+				floor_value = key_value;
+				key_index++;
+				
+				// Add the Second value "X + Y"
+				} else if (key_index == 1){
+				floor_value = floor_value*10 + key_value;
+				key_index++;
+			}
+			
+			itoa(floor_value, key, 10);
+			UART_send_string("Current floor: ");
+			UART_send_string(key);
+			char lcd_msg[16];
+			sprintf(lcd_msg, "Input: %s", key);
+			LCD_top(lcd_msg);
+			UART_send_string ("\r\n");
 		}
 		
-		ptr = key_str;
+		// If key input is '*' we are ready with inputs.
+		//}
+		
+		else if(key_signal == 42){
+			keypad_ready = 1;
+			itoa(floor_value, key, 10);
+			UART_send_string("Set floor: ");
+			UART_send_string(key);
+			UART_send_string ("\r\n");
+			} else {
+			itoa(floor_value, key, 10);
+			UART_send_string("Key pressed: ");
+			UART_send_string(key);
+			UART_send_string ("\r\n");
+			UART_send_string("Give proper value between 0 - 9");
+			UART_send_string ("\r\n");
+		}
 	}
-	return ptr;
+	return floor_value;
 }
 
 // Send a command to the slave device
@@ -338,28 +418,4 @@ void UART_send_string(char* str) {
 	while (*str) {
 		UART_send_char(*str++);
 	}
-}
-
-// LCD display top row updates when elevator gives new information to user
-void LCD_top(const char* msg) {
-	lcd_gotoxy(0,0);
-	clear_LCD_line(0);
-	lcd_puts(msg);
-}
-
-// LCD display bottom row updates when elevator floor changes
-void LCD_bottom(int floor){
-	char str[20];
-	sprintf(str, "Current floor: %d", floor);
-	lcd_gotoxy(0,1);
-	clear_LCD_line(1);
-	lcd_puts(str);
-}
-
-// Clear one line (row) from LCD
-void clear_LCD_line(uint8_t row){
-	lcd_gotoxy(0, row);
-	for(uint8_t i=0; i < 16; i++)
-		lcd_putc(' ');
-	lcd_gotoxy(0,row);
 }
