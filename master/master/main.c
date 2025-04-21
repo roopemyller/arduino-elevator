@@ -57,11 +57,6 @@ int main(void) {
 	// str_ptr = str;
 	
     while (1) {
-
-		// Check for emergency button pressed
-		if ((PINB & (1 << PB0)) == 0) {
-			emergency_mode();
-		}
   	
 		uint8_t key_input = KEYPAD_GetKey();
 		
@@ -193,14 +188,6 @@ void setup(){
 	// Init keypad
 	KEYPAD_Init();
 	_delay_ms(20);
-
-	// Initialize interrupts
-	EIMSK |= (1 << INT0);	// Enable external interrupt INT0
-    EICRA |= (1 << ISC01);	// Falling edge generates interrupt request
-    EICRA &= ~(1 << ISC00);
-    DDRD &= ~(1 << PD2);	// PD2 as input
-    PORTD |= (1 << PD2);
-    sei();					// Enable global interrupts
 }
 
 char* get_key_pressed(){
@@ -375,41 +362,4 @@ void clear_LCD_line(uint8_t row){
 	for(uint8_t i=0; i < 16; i++)
 		lcd_putc(' ');
 	lcd_gotoxy(0,row);
-}
-
-// Trigger emergency mode function when button pressed
-ISR(INT0_vect) {
-    emergency_mode();
-}
-
-void emergency_mode() {
-    char str[16];
-    
-    UART_send_string("Emergency!!!\r\n");
-    LCD_top("EMERGENCY!!!");
-    
-	send_command('E');  // Send emergency command
-
-    LCD_top("Press key to open");
-    UART_send_string("Waiting for key press to start melody...\r\n");
-    while (KEYPAD_GetKey() == 0);  // Wait until a key is pressed
-
-	// Open door
-    send_command('O');
-
-	// Start melody
-    send_command('M');  // Send start melody command
-    LCD_top("Melody Playing...");
-
-    LCD_top("Press key to stop");
-    while (KEYPAD_GetKey() == 0);  // Wait until a second key is pressed
-
-    // Stop melody
-    send_command('X');  // Send stop melody command
-
-    // Close door
-	send_command('E');
-
-    // Back to idle
-    LCD_top("Choose the floor");
 }
