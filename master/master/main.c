@@ -43,10 +43,18 @@ void door_open_close();
 void LCD_top(const char* msg); // Top row of LCD display
 void LCD_bottom(int floor); // Bottom row of LCD display
 void clear_LCD_line(uint8_t row);
+void emergency_mode();
 
 char key_str[4];
 char* ptr;
 
+// Trigger emergency mode function when button pressed
+ISR(INT2_vect) {
+	_delay_ms(50); // debounce delay
+    if (!(PIND & (1 << PD2))) { // button still low?
+		emergency_mode();
+	}
+}
 
 int main(void) {
 	
@@ -57,12 +65,6 @@ int main(void) {
 	// str_ptr = str;
 	
     while (1) {
-
-		// Check for emergency button pressed
-		if ((PINB & (1 << PB0)) == 0) {
-			emergency_mode();
-		}
-  	
 		uint8_t key_input = KEYPAD_GetKey();
 		
 		// Tallennetaan	kaapattu keypad painallus int ja str pointer muodossa	
@@ -133,7 +135,6 @@ int main(void) {
 				break;
 				
 			case 3: // GO DOWN
-			
 	            _delay_ms(20);  // Debounce
 	            UART_send_string("Going down!\r\n");
 				send_command('M');
@@ -195,7 +196,7 @@ void setup(){
 	_delay_ms(20);
 
 	// Initialize interrupts
-	EIMSK |= (1 << INT0);	// Enable external interrupt INT0
+	EIMSK |= (1 << INT2);	// Enable external interrupt INT0
     EICRA |= (1 << ISC01);	// Falling edge generates interrupt request
     EICRA &= ~(1 << ISC00);
     DDRD &= ~(1 << PD2);	// PD2 as input
@@ -377,38 +378,39 @@ void clear_LCD_line(uint8_t row){
 	lcd_gotoxy(0,row);
 }
 
-// Trigger emergency mode function when button pressed
-ISR(INT0_vect) {
-    emergency_mode();
-}
-
 void emergency_mode() {
-    char str[16];
-    
     UART_send_string("Emergency!!!\r\n");
     LCD_top("EMERGENCY!!!");
     
 	send_command('E');  // Send emergency command
+	_delay_ms(500);
 
     LCD_top("Press key to open");
     UART_send_string("Waiting for key press to start melody...\r\n");
+	_delay_ms(500);
+
     while (KEYPAD_GetKey() == 0);  // Wait until a key is pressed
 
 	// Open door
     send_command('O');
+	_delay_ms(500);
 
 	// Start melody
     send_command('M');  // Send start melody command
+
     LCD_top("Melody Playing...");
-
+	_delay_ms(500);
     LCD_top("Press key to stop");
-    while (KEYPAD_GetKey() == 0);  // Wait until a second key is pressed
 
+    while (KEYPAD_GetKey() == 0);  // Wait until a second key is pressed
+	_delay_ms(500);
     // Stop melody
     send_command('X');  // Send stop melody command
+	_delay_ms(500);
 
     // Close door
 	send_command('E');
+	_delay_ms(500);
 
     // Back to idle
     LCD_top("Choose the floor");

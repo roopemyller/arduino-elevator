@@ -19,6 +19,8 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 
+volatile uint8_t melody_active = 1;
+
 void TWI_init(){
 	// Init the TWI Slave
 	TWCR = (1 << TWEN) | (1 << TWEA) | (1 << TWIE); // Enable TWI, ACK and interrupt
@@ -91,8 +93,8 @@ ISR(TWI_vect){
 			buzzer_play(13881, (1 << CS11) | (1 << CS10)); // D0
 			_delay_ms(300);
 		} else if (command == 'X') {
-			buzzer_stop();
-		}// Melody end
+			buzzer_stop(); // Melody end
+		}
   		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
