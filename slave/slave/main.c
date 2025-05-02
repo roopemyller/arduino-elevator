@@ -18,6 +18,38 @@
 #include <stdio.h>
 #include <avr/interrupt.h>
 
+volatile uint8_t melody_active = 1;
+
+volatile uint8_t play_emergency = 0;
+
+void buzzer_play(uint16_t frequency) {
+	// Set PB3 (OC2A) as output
+	DDRB |= (1 << PB3);
+
+	// Clear previous settings
+	TCCR2A = 0;
+	TCCR2B = 0;
+
+	// Set CTC mode (WGM21), toggle OC2A on compare match (COM2A0)
+	TCCR2A |= (1 << WGM21) | (1 << COM2A0);
+
+	// Prescaler = 8, so CS21
+	TCCR2B |= (1 << CS21);
+
+	// Calculate and set compare value
+	// OCR2A = (F_CPU / (2 * Prescaler * Frequency)) - 1
+	OCR2A = (F_CPU / (2UL * 8UL * frequency)) - 1;
+}
+
+void buzzer_stop() {
+	// Disable Timer2
+	TCCR2A = 0;
+	TCCR2B = 0;
+
+	// Optionally pull the pin low
+	PORTB &= ~(1 << PB3);
+}
+
 void TWI_init(){
 	// Init the TWI Slave
 	TWCR = (1 << TWEN) | (1 << TWEA) | (1 << TWIE); // Enable TWI, ACK and interrupt
@@ -34,6 +66,17 @@ void blink(uint8_t led_pin, int times){
 	}
 }
 
+void play_emergency_melody() {
+	blink(MOVEMENT_LED, 5);
+
+	uint16_t tones[] = {1000, 800, 400, 600};
+	for (int i = 0; i < 4; i++) {
+		buzzer_play(tones[i]);
+		_delay_ms(1000);
+	}
+
+	buzzer_stop();
+}
 
 ISR(TWI_vect){
 	// Get status code
@@ -57,8 +100,16 @@ ISR(TWI_vect){
 			PORTB &= ~(1 << DOOR_LED); // Turn OFF door LED
 		} else if (command == 'F'){ // Fault state, blink movement LED 3 times
 			blink(MOVEMENT_LED, 3);
-		}
-		
+        } else if (command == 'E') { // Emergency state
+            blink(MOVEMENT_LED, 3);
+        } else if (command == 'O') {
+            PORTB |= (1 << DOOR_LED);  // Turn ON door LED (open door)
+			play_emergency = 1;
+        } else if (command == 'X') {
+            play_emergency = 0; 
+            PORTB &= ~(1 << DOOR_LED); // Automatically close the door
+        }
+  		
 		TWCR = (1 << TWINT) | (1 << TWEA) | (1 << TWEN) | (1 << TWIE);
 	}
 	else {
@@ -76,9 +127,11 @@ int main(void){
 	TWI_init();
 	
 	while (1){
+		if (play_emergency) {
+			play_emergency_melody();
+		}
 		
 	}
 	
 	return 0;
 }
-
