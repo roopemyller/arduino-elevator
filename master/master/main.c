@@ -437,7 +437,7 @@ void emergency_mode() {
 	send_command('E');  // Send emergency command to slave (blinking LED)
 	UART_send_string("Press any key on keypad to open door and start emergency melody.\r\n");
 	get_any_key_press(); // Wait for any key press
-	send_command('O');  // Send command to open door and start melody on slave
+	send_command('P');  // Send command to open door and start melody on slave
 	LCD_top("Door is open!");
 }
 

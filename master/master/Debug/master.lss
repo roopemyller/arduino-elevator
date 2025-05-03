@@ -1762,8 +1762,8 @@ void emergency_mode() {
      a4a:	34 de       	rcall	.-920    	; 0x6b4 <UART_send_string>
 	get_any_key_press(); // Wait for any key press
      a4c:	4c df       	rcall	.-360    	; 0x8e6 <get_any_key_press>
-	send_command('O');  // Send command to open door and start melody on slave
-     a4e:	8f e4       	ldi	r24, 0x4F	; 79
+	send_command('P');  // Send command to open door and start melody on slave
+     a4e:	80 e5       	ldi	r24, 0x50	; 80
      a50:	8b df       	rcall	.-234    	; 0x968 <send_command>
      a52:	85 e6       	ldi	r24, 0x65	; 101
 	LCD_top("Door is open!");
